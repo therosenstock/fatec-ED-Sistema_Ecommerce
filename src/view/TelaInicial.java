@@ -46,20 +46,16 @@ public class TelaInicial extends JFrame {
 		contentPane.setLayout(null);
 		
 		JButton btnNewButton = new JButton("Área de Compras");
-		btnNewButton.setBounds(131, 135, 168, 50);
+		btnNewButton.setBounds(219, 135, 168, 50);
 		contentPane.add(btnNewButton);
 		
 		JButton btnGerenciarCliente = new JButton("Gerenciar Cliente");
-		btnGerenciarCliente.setBounds(316, 135, 168, 50);
+		btnGerenciarCliente.setBounds(219, 196, 168, 50);
 		contentPane.add(btnGerenciarCliente);
 		
 		JButton btnGerenciarProdutos = new JButton("Gerenciar Produtos");
-		btnGerenciarProdutos.setBounds(316, 196, 168, 50);
+		btnGerenciarProdutos.setBounds(219, 255, 168, 50);
 		contentPane.add(btnGerenciarProdutos);
-		
-		JButton btnGerenciarTipoDe = new JButton("Gerenciar Categorias");
-		btnGerenciarTipoDe.setBounds(131, 197, 168, 50);
-		contentPane.add(btnGerenciarTipoDe);
 		
 		Panel panel_1_2 = new Panel();
 		panel_1_2.setBackground(new Color(234, 255, 215));

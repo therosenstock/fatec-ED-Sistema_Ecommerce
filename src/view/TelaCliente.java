@@ -36,6 +36,7 @@ public class TelaCliente extends JFrame {
 	private JTable table_carrinho;
 	private DefaultTableModel modeloCatalogo;
 	private DefaultTableModel modeloCarrinho;
+	private JTextField textField_4;
 
 	/**
 	 * Launch the application.
@@ -174,43 +175,7 @@ public class TelaCliente extends JFrame {
 		carrinho.add(scrollCarrinho);
 		preencherCarrinho();
 		
-		
-		
-		JPanel checkout = new JPanel();
-		tabbedPane.addTab("Checkout", null, checkout, null);
-		checkout.setLayout(null);
-		
-		Panel panel_1_1 = new Panel();
-		panel_1_1.setBounds(198, 10, 194, 33);
-		panel_1_1.setBackground(new Color(234, 255, 215));
-		checkout.add(panel_1_1);
-		
-		Label label_1 = new Label("Conferência:");
-		label_1.setFont(new Font("Dialog", Font.PLAIN, 12));
-		panel_1_1.add(label_1);
-		
-		JLabel lblNewLabel_6_2 = new JLabel("Valor Total:");
-		lblNewLabel_6_2.setBounds(20, 289, 180, 33);
-		lblNewLabel_6_2.setFont(new Font("Tahoma", Font.BOLD, 14));
-		checkout.add(lblNewLabel_6_2);
-		
-		JLabel lblNewLabel_6_1_1 = new JLabel("R$ 599, 97");
-		lblNewLabel_6_1_1.setBounds(20, 289, 180, 33);
-		lblNewLabel_6_1_1.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblNewLabel_6_1_1.setFont(new Font("Tahoma", Font.BOLD, 14));
-		checkout.add(lblNewLabel_6_1_1);
-		
-		JButton btnNewButton_3_1_1 = new JButton("Finalizar");
-		btnNewButton_3_1_1.setBounds(417, 295, 180, 23);
-		btnNewButton_3_1_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		checkout.add(btnNewButton_3_1_1);
-		
 		String[] mugiwara = {"Ronronoa Zoro", "Usopp", "Franky / Cutty Flam"};
-		
-		JList checkoutList = new JList(mugiwara);
-		JScrollPane scrollCheckout = new JScrollPane(checkoutList);
-		scrollCheckout.setBounds(20, 69, 577, 199);
-		checkout.add(scrollCheckout);
 		
 		
 		JPanel historico = new JPanel();
@@ -258,6 +223,51 @@ public class TelaCliente extends JFrame {
 		lblNewLabel_8_1.setBounds(254, 59, 142, 14);
 		historico.add(lblNewLabel_8_1);
 		
+		
+		
+		JPanel checkout = new JPanel();
+		tabbedPane.addTab("Checkout", null, checkout, null);
+		checkout.setLayout(null);
+		
+		Panel panel_1_1 = new Panel();
+		panel_1_1.setBounds(198, 10, 194, 33);
+		panel_1_1.setBackground(new Color(234, 255, 215));
+		checkout.add(panel_1_1);
+		
+		Label label_1 = new Label("Conferência:");
+		label_1.setFont(new Font("Dialog", Font.PLAIN, 12));
+		panel_1_1.add(label_1);
+		
+		JLabel lblNewLabel_6_2 = new JLabel("Valor Total:");
+		lblNewLabel_6_2.setBounds(399, 288, 180, 33);
+		lblNewLabel_6_2.setFont(new Font("Tahoma", Font.BOLD, 14));
+		checkout.add(lblNewLabel_6_2);
+		
+		JLabel lblNewLabel_6_1_1 = new JLabel("R$ 599, 97");
+		lblNewLabel_6_1_1.setBounds(417, 288, 180, 33);
+		lblNewLabel_6_1_1.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblNewLabel_6_1_1.setFont(new Font("Tahoma", Font.BOLD, 14));
+		checkout.add(lblNewLabel_6_1_1);
+		
+		JButton btnNewButton_3_1_1 = new JButton("Finalizar");
+		btnNewButton_3_1_1.setBounds(417, 335, 180, 23);
+		btnNewButton_3_1_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		checkout.add(btnNewButton_3_1_1);
+		
+		JList checkoutList = new JList(mugiwara);
+		JScrollPane scrollCheckout = new JScrollPane(checkoutList);
+		scrollCheckout.setBounds(20, 69, 577, 199);
+		checkout.add(scrollCheckout);
+		
+		textField_4 = new JTextField();
+		textField_4.setBounds(149, 291, 209, 30);
+		checkout.add(textField_4);
+		textField_4.setColumns(10);
+		
+		JLabel lblNewLabel = new JLabel("Identificação do cliente:");
+		lblNewLabel.setBounds(20, 299, 151, 14);
+		checkout.add(lblNewLabel);
+		
 	}
     private void preencherCatalogo() {
     	 modeloCatalogo.addRow(new Object[]{1, "Produto A", "Tipo 1"});
@@ -269,5 +279,4 @@ public class TelaCliente extends JFrame {
 	   	modeloCarrinho.addRow(new Object[]{2, "Produto B", "678,50", "2"});
 	   	modeloCarrinho.addRow(new Object[]{3, "Produto C", "2,00", "1" });
    }
-
 }
