@@ -106,7 +106,7 @@ public class TelaCliente extends JFrame {
 		btnNewButton_4_1.setBounds(487, 84, 89, 23);
 		produtos.add(btnNewButton_4_1);
 		
-		JComboBox comboBox = new JComboBox();
+		JComboBox comboBox = new JComboBox<Object>();
 		comboBox.setBounds(350, 80, 127, 30);
 		produtos.add(comboBox);
 		
