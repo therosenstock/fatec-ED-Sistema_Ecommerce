@@ -10,6 +10,8 @@ import java.awt.Panel;
 import java.awt.Color;
 import java.awt.Label;
 import java.awt.Font;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class TelaInicial extends JFrame {
 
@@ -45,9 +47,17 @@ public class TelaInicial extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JButton btnNewButton = new JButton("Área de Compras");
-		btnNewButton.setBounds(219, 135, 168, 50);
-		contentPane.add(btnNewButton);
+		JButton btnCompras = new JButton("Área de Compras");
+		var self = this;
+		btnCompras.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				var novaTela = new TelaCliente();
+				novaTela.setVisible(true);
+				self.setVisible(false);
+			}
+		});
+		btnCompras.setBounds(219, 135, 168, 50);
+		contentPane.add(btnCompras);
 		
 		JButton btnGerenciarCliente = new JButton("Gerenciar Cliente");
 		btnGerenciarCliente.setBounds(219, 196, 168, 50);
