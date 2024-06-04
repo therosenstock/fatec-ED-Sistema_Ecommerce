@@ -29,6 +29,12 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.awt.event.ActionEvent;
 
 public class TelaProdutos extends JFrame {
@@ -50,6 +56,7 @@ public class TelaProdutos extends JFrame {
 	private List<Produto> produtos;
 	private ConsultarTipoProdutoPanel consultarTipoProdutoPanel;
 	private AdicionarProdutoPanel adicionarProdutoPanel;
+	private String arquivoTipo = "tipos.txt";
 
 	/**
 	 * Launch the application.
@@ -73,6 +80,7 @@ public class TelaProdutos extends JFrame {
 	public TelaProdutos() {
 		tiposProduto = new ArrayList<TipoProduto>();
 		produtos = new ArrayList<Produto>();
+		inicializarDados();
 		setTitle("Área de Estoque");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 640, 480);
@@ -150,7 +158,7 @@ public class TelaProdutos extends JFrame {
 			@Override
 			public void actionPerformed(TipoProduto tipo) {
 				tiposProduto.remove(tipo);
-				atualizarTiposProtudo();
+				//atualizarTiposProdutos();
 			}
 		});
 		
@@ -162,7 +170,7 @@ public class TelaProdutos extends JFrame {
 			@Override
 			public void actionPerformed(TipoProduto tipo) {
 				tiposProduto.add(tipo);
-				atualizarTiposProtudo();
+				atualizarTiposProdutos(tipo);
 			}
 		});
 		
@@ -172,8 +180,43 @@ public class TelaProdutos extends JFrame {
 		modeloProduto = new DefaultTableModel(new Object[]{"ID", "Nome", "Valor", "Descrição", "Quantidade"}, 0);
 	}
 	
-	private void atualizarTiposProtudo() {
+	private void atualizarTiposProdutos(TipoProduto tipo) {
+		// Salvar no arquivo
+		try(BufferedWriter writer = new BufferedWriter(new FileWriter(arquivoTipo))){
+			writer.write(tipo.toString());
+			writer.newLine();
+			writer.close();
+			System.out.println(tipo.toString());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		consultarTipoProdutoPanel.setTiposProduto(tiposProduto);
 		adicionarProdutoPanel.setTiposProduto(tiposProduto);
+	}
+	
+	private void atualizarProdutos() {
+		// Salvar no arquivo
+	}
+	
+	private void inicializarDados() {
+		try(BufferedReader reader = new BufferedReader(new FileReader(arquivoTipo))){
+			String line;
+			while((line = reader.readLine()) != null) {
+				var dados = line.split(";");
+				TipoProduto tipo = new TipoProduto();
+				tipo.setId(Long.parseLong(dados[0]));
+				tipo.setNome(dados[1]);
+				tipo.setDescricao(dados[2]);
+				tiposProduto.add(tipo);
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 }

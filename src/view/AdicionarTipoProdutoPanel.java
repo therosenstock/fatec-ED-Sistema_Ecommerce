@@ -20,9 +20,10 @@ public class AdicionarTipoProdutoPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private JTextField nomeTxt;
-	private CriarTipoProdutoAction listener;
 	private JLabel nomeLabel;
 	private JTextArea descricaoTxt;
+	private JLabel descricaoLabel;
+	private CriarTipoProdutoAction listener;
 
 	/**
 	 * Create the panel.
@@ -43,7 +44,7 @@ public class AdicionarTipoProdutoPanel extends JPanel {
 		descricaoTxt.setBounds(10, 141, 599, 81);
 		this.add(descricaoTxt);
 		
-		JLabel descricaoLabel = new JLabel("Descrição:");
+		descricaoLabel = new JLabel("Descrição:");
 		descricaoLabel.setBounds(10, 124, 108, 14);
 		this.add(descricaoLabel);
 		
@@ -78,8 +79,13 @@ public class AdicionarTipoProdutoPanel extends JPanel {
 			this.nomeLabel.setForeground(Color.RED);
 			return false;
 		}
+		if(this.descricaoTxt.getText().equals("")) {
+			this.descricaoLabel.setForeground(Color.RED);
+			return false;
+		}
 		
 		this.nomeLabel.setForeground(Color.BLACK);
+		this.descricaoLabel.setForeground(Color.BLACK);
 		return true;
 	}
 	
