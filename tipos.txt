@@ -1,1 +1,8 @@
-1717464355240;bens de conveniência;adquiridos frequentemente e com um esforço mínimo
+1717528300793;produtos ao consumidor;usados por usuários-finais
+1717528944698;produtos industriais;usados na produção de outros bens
+1717529992479;bens de conveniência;adquiridos frequentemente e com um esforço mínimo
+1717530132649;bens de impulso;compra por estímulo sensorial imediato
+1717544477867;bens de emergência;bens necessarios imediatamente
+1717545928100;bens de compra comparada;alguma comparação com outros bens como carros e TVs
+1717546429507;bens de especialidade;comparação extensiva com outros bens e uma longa busca por informações
+1717546718626;bens pereciveis;bens que se deteriorarão rapidamente mesmo sem uso

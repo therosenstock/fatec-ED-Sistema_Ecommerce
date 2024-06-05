@@ -31,6 +31,11 @@ public class AdicionarProdutoPanel extends JPanel {
 	private DefaultComboBoxModel<TipoProduto> cbxModelo;
 	private JComboBox<TipoProduto> tipoCbx;
 	private CriarProdutoAction listener;
+	private JLabel descricaoLabel;
+	private JLabel valorLabel;
+	private JLabel quantidadeLabel;
+	private JLabel nomeLabel;
+	private JLabel tipoLabel;
 
 	/**
 	 * Create the panel.
@@ -65,22 +70,22 @@ public class AdicionarProdutoPanel extends JPanel {
 		this.add(quantidadeTxt);
 		
 		descricaoTxt = new JTextArea();
-		descricaoTxt.setBounds(10, 198, 599, 81);
+		descricaoTxt.setBounds(10, 198, 599, 47);
 		this.add(descricaoTxt);
 		
-		JLabel descricaoLabel = new JLabel("Descrição:");
+		descricaoLabel = new JLabel("Descrição:");
 		descricaoLabel.setBounds(10, 181, 108, 14);
 		this.add(descricaoLabel);
 		
-		JLabel valorLabel = new JLabel("Valor:");
+		valorLabel = new JLabel("Valor:");
 		valorLabel.setBounds(10, 125, 46, 14);
 		this.add(valorLabel);
 		
-		JLabel quantidadeLabel = new JLabel("Quantidade:");
+		quantidadeLabel = new JLabel("Quantidade:");
 		quantidadeLabel.setBounds(333, 125, 113, 14);
 		this.add(quantidadeLabel);
 		
-		JLabel nomeLabel = new JLabel("Nome:");
+		nomeLabel = new JLabel("Nome:");
 		nomeLabel.setBounds(10, 65, 46, 14);
 		this.add(nomeLabel);
 		
@@ -101,29 +106,49 @@ public class AdicionarProdutoPanel extends JPanel {
 				listener.actionPerformed(produto);
 			}
 		});
-		adicionarBtn.setBounds(520, 317, 89, 23);
+		adicionarBtn.setBounds(520, 322, 89, 23);
 		this.add(adicionarBtn);
 
 		tipoCbx = new JComboBox();
 		tipoCbx.setModel(cbxModelo);
-		tipoCbx.setBounds(10, 290, 143, 22);
+		tipoCbx.setBounds(10, 274, 599, 30);
 		this.add(tipoCbx);
+		
+		tipoLabel = new JLabel("Tipo do Produto:");
+		tipoLabel.setBounds(10, 256, 108, 14);
+		add(tipoLabel);
 	}
 	
 	public void setTiposProduto(List<TipoProduto> tiposProduto) {
 		this.tiposProduto = tiposProduto;
 		cbxModelo.removeAllElements();
 		for (var tipo : tiposProduto) {
+			System.out.println(tipo);
 			cbxModelo.addElement(tipo);
 		}
 	}
 	
 	private boolean validarFormulario() {
-		if (nomeTxt.getText().equals("")) return false;
-		if (descricaoTxt.getText().equals("")) return false;
-		if (valorTxt.getText().equals("")) return false;
-		if (quantidadeTxt.getText().equals("")) return false;
-		if (tipoCbx.getSelectedIndex() == -1) return false;
+		if (nomeTxt.getText().equals("")) {
+			this.nomeLabel.setForeground(Color.RED);
+			return false;
+		}
+		if (descricaoTxt.getText().equals("")) {
+			this.descricaoTxt.setForeground(Color.RED);
+			return false;
+		}
+		if (valorTxt.getText().equals("")) {
+			this.valorLabel.setForeground(Color.RED);
+			return false;
+		}
+		if (quantidadeTxt.getText().equals("")) {
+			this.quantidadeLabel.setForeground(Color.RED);
+			return false;
+		}
+		if (tipoCbx.getSelectedIndex() == -1) {
+			this.tipoLabel.setForeground(Color.RED);
+			return false;
+		}
 		return true;
 	}
 	
@@ -138,5 +163,6 @@ public class AdicionarProdutoPanel extends JPanel {
 	public void addActionListener(CriarProdutoAction listener) {
 		this.listener = listener;
 	}
-
 }
+
+

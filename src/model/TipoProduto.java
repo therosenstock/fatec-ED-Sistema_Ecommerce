@@ -31,7 +31,7 @@ public class TipoProduto {
 	}
 	
 	public String toString() {
-		return this.id+";"+this.nome+";"+this.descricao;
+		return this.nome;
 	}
 	
 	

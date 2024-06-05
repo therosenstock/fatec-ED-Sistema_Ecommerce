@@ -41,22 +41,18 @@ public class TelaProdutos extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JTable table_produto;
 	private DefaultTableModel modeloProduto;
 	private JTable table_tipos;
 	private DefaultTableModel modeloTipos;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField tipoProdutoNomeTxt;
-	private JTextField textField_3;
-	private JTextField textField_6;
+
 	
 	private List<TipoProduto> tiposProduto;
 	private List<Produto> produtos;
 	private ConsultarTipoProdutoPanel consultarTipoProdutoPanel;
 	private AdicionarProdutoPanel adicionarProdutoPanel;
+	private ConsultarProdutoPanel consultarProdutoPanel; 
 	private String arquivoTipo = "tipos.txt";
+	private String arquivoProduto = "produtos.txt";
 
 	/**
 	 * Launch the application.
@@ -104,53 +100,7 @@ public class TelaProdutos extends JFrame {
 		});
 		tabbedPane.addTab("Cadastro de Produto", null, adicionarProdutoPanel, null);
 		
-		JPanel consultaProdutos = new JPanel();
-		tabbedPane.addTab("Consultar Produtos", null, consultaProdutos, null);
-		consultaProdutos.setLayout(null);
-		table_produto = new JTable(modeloProduto);
-		JScrollPane scrollProduto = new JScrollPane(table_produto);
-		//table_produtos.setBounds(35, 161, 541, 175);
-		scrollProduto.setBounds(28, 123, 557, 231);
-		consultaProdutos.add(scrollProduto);
-		
-		Panel panel_1_3 = new Panel();
-		panel_1_3.setBackground(new Color(234, 255, 215));
-		panel_1_3.setBounds(195, 10, 194, 33);
-		consultaProdutos.add(panel_1_3);
-		
-		Label label_3 = new Label("Consulta de Produtos");
-		label_3.setFont(new Font("Dialog", Font.PLAIN, 12));
-		panel_1_3.add(label_3);
-		
-		textField_3 = new JTextField();
-		textField_3.setBounds(28, 71, 228, 30);
-		consultaProdutos.add(textField_3);
-		textField_3.setColumns(10);
-		
-		JButton btnBuscarProduto = new JButton("Buscar");
-		btnBuscarProduto.setBounds(260, 75, 70, 23);
-		consultaProdutos.add(btnBuscarProduto);
-		
-		JLabel lblNewLabel_5 = new JLabel("Nome:");
-		lblNewLabel_5.setBounds(28, 53, 46, 14);
-		consultaProdutos.add(lblNewLabel_5);
-		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(332, 71, 163, 30);
-		consultaProdutos.add(comboBox);
-		
-		JLabel lblNewLabel_6 = new JLabel("Escolha o Tipo:");
-		lblNewLabel_6.setBounds(332, 53, 78, 14);
-		consultaProdutos.add(lblNewLabel_6);
-		
-		JButton btnFiltrarProduto = new JButton("Filtrar");
-		btnFiltrarProduto.setBounds(505, 75, 89, 23);
-		consultaProdutos.add(btnFiltrarProduto);
-		
-		JButton btnRemoverProduto = new JButton("Remover");
-		btnRemoverProduto.setBounds(494, 366, 89, 23);
-		consultaProdutos.add(btnRemoverProduto);
-		
+
 		consultarTipoProdutoPanel = new ConsultarTipoProdutoPanel();
 		consultarTipoProdutoPanel.setTiposProduto(tiposProduto);
 		consultarTipoProdutoPanel.addActionsListener(new RemoverTipoProdutoAction() {
@@ -172,18 +122,32 @@ public class TelaProdutos extends JFrame {
 				tiposProduto.add(tipo);
 				atualizarTiposProdutos(tipo);
 			}
+
+		});
+		
+		adicionarProdutoPanel.addActionListener(new CriarProdutoAction() {
+			
+			@Override
+			public void actionPerformed(Produto produto) {
+				produtos.add(produto);
+				atualizarProdutos(produto);
+			}
 		});
 		
 
 		tabbedPane.addTab("Consultar Tipos de Produto", null, consultarTipoProdutoPanel, null);
+		
+		consultarProdutoPanel = new ConsultarProdutoPanel();
+		tabbedPane.addTab("Consultar Produto", null, consultarProdutoPanel, null);
+		
 
 		modeloProduto = new DefaultTableModel(new Object[]{"ID", "Nome", "Valor", "Descrição", "Quantidade"}, 0);
 	}
 	
 	private void atualizarTiposProdutos(TipoProduto tipo) {
 		// Salvar no arquivo
-		try(BufferedWriter writer = new BufferedWriter(new FileWriter(arquivoTipo))){
-			writer.write(tipo.toString());
+		try(BufferedWriter writer = new BufferedWriter(new FileWriter(arquivoTipo, true))){
+			writer.write(tipo.getId()+";"+tipo.getNome()+";"+tipo.getDescricao());
 			writer.newLine();
 			writer.close();
 			System.out.println(tipo.toString());
@@ -191,12 +155,28 @@ public class TelaProdutos extends JFrame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		System.out.println(tiposProduto + " atualizando");
+		
 		consultarTipoProdutoPanel.setTiposProduto(tiposProduto);
 		adicionarProdutoPanel.setTiposProduto(tiposProduto);
+		consultarProdutoPanel.setTiposProduto(tiposProduto);
+		
 	}
 	
-	private void atualizarProdutos() {
+	private void atualizarProdutos(Produto produto) {
 		// Salvar no arquivo
+		try(BufferedWriter writer = new BufferedWriter(new FileWriter(arquivoProduto, true))){
+			var dados = produto.getId()+";"+produto.getNome()+";"+produto.getDescricao()+";"+produto.getQuantidade()+";"+produto.getValor()+";"+produto.getTipo().getId()+";"+produto.getTipo().getNome();
+			writer.write(dados);
+			writer.newLine();
+			writer.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println(produto + " atualizando");
+		
+		consultarProdutoPanel.setProduto(produtos);
 	}
 	
 	private void inicializarDados() {
@@ -208,15 +188,35 @@ public class TelaProdutos extends JFrame {
 				tipo.setId(Long.parseLong(dados[0]));
 				tipo.setNome(dados[1]);
 				tipo.setDescricao(dados[2]);
+				
 				tiposProduto.add(tipo);
 			}
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+//		try(BufferedReader reader = new BufferedReader(new FileReader(arquivoProduto))){
+//			String line;
+//			while((line = reader.readLine()) != null) {
+//				var dados = line.split(";");
+//				Produto produto = new Produto();
+//				produto.setId(Long.parseLong(dados[0]));
+//				produto.setNome(dados[1]);
+//				produto.setDescricao(dados[2]);
+//				produto.setQuantidade(Integer.parseInt(dados[3]));
+//				produto.setValor(Double.parseDouble(dados[4]));
+//				produto.set
+//				
+//				
+//				
+//				produtos.add(produto);
+//			}
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		
 	}
+	
+	
 }
