@@ -38,8 +38,8 @@ public class TelaCliente extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	
-	private List<PessoaJuridica> clientesPj = new ArrayList<PessoaJuridica>();;
-	private List<PessoaFisica> clientesPf = new ArrayList<PessoaFisica>();;
+	private List<PessoaJuridica> clientesPj = new ArrayList<PessoaJuridica>();
+	private List<PessoaFisica> clientesPf = new ArrayList<PessoaFisica>();
 	
 
 	private ConsultarClientesPanel consultarClientesPanel;
@@ -70,8 +70,8 @@ public class TelaCliente extends JFrame {
 		setTitle("Área de Clientes");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 640, 480);
-		 clientesPj = new ArrayList<PessoaJuridica>();
-		 clientesPf = new ArrayList<PessoaFisica>();
+		inicializarListas();	
+
 		 
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -87,6 +87,12 @@ public class TelaCliente extends JFrame {
 		adicionarClientePF = new AdicionarClientePFPanel();
 		adicionarClientePJ = new AdicionarClientePJPanel();
 		
+		adicionarClientePF.setClientePF(clientesPf);
+		adicionarClientePF.setClientePJ(clientesPj);
+		adicionarClientePJ.setClientePF(clientesPf);
+		adicionarClientePJ.setClientePJ(clientesPj);
+		consultarClientesPanel.setClientesPf(clientesPf);
+		consultarClientesPanel.setClientesPj(clientesPj);
 		//funçoes de set
 		tabbedPane.addTab("Consultar Clientes", null, consultarClientesPanel, null);
 		tabbedPane.addTab("Cadastro de Pessoa Física", null, adicionarClientePF, null);
@@ -99,6 +105,8 @@ public class TelaCliente extends JFrame {
 			
 				clientesPj.add(cliente);
 				atualizarClientePj(cliente);
+				
+				
 			}
 
 			@Override
@@ -120,9 +128,7 @@ public class TelaCliente extends JFrame {
 			}
 
 		});
-		inicializarListas();
-		
-		
+	
 
 	}
 	
@@ -138,6 +144,10 @@ public class TelaCliente extends JFrame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+		adicionarClientePF.setClientePJ(clientesPj);
+		adicionarClientePJ.setClientePJ(clientesPj);
+		consultarClientesPanel.setClientesPj(clientesPj);
 		
 	}
 	private void atualizarClientePf(PessoaFisica cliente) {
@@ -152,6 +162,10 @@ public class TelaCliente extends JFrame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		adicionarClientePF.setClientePF(clientesPf);
+		adicionarClientePJ.setClientePF(clientesPf);
+		consultarClientesPanel.setClientesPf(clientesPf);
+
 		
 	}
 	
@@ -171,7 +185,7 @@ public class TelaCliente extends JFrame {
 					pf.setComplemento(dados[4]);
 					pf.setCep(Integer.parseInt(dados[5]));
 					pf.setTelefone(Long.parseLong(dados[6]));
-					
+					System.out.println(pf.getNome() + " pf");
 					clientesPf.add(pf);
 
 				} else {
@@ -184,15 +198,18 @@ public class TelaCliente extends JFrame {
 					pj.setCep(Integer.parseInt(dados[5]));
 					pj.setTelefone(Long.parseLong(dados[6]));
 					pj.setEmail(dados[7]);
+					System.out.println(pj.getNomeFantasia());
 					
 					clientesPj.add(pj);
 					
 				}
 			}
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
 	}
 	
 	

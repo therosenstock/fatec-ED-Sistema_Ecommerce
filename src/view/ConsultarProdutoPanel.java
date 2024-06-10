@@ -108,6 +108,19 @@ public class ConsultarProdutoPanel extends JPanel {
 		consultaProdutos.add(btnFiltrarProduto);
 		
 		JButton btnRemoverProduto = new JButton("Remover");
+		btnRemoverProduto.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int linha = tabelaProdutos.getSelectedRow();
+				long id = Long.parseLong(modeloProdutos.getValueAt(linha, 0).toString());
+				modeloProdutos.removeRow(linha);
+				for (Produto prod : produtos) {
+					if (prod.getId() == id) {
+						listener.actionPerformed(prod);
+						break;
+					}
+				}
+			}
+		});
 		btnRemoverProduto.setBounds(494, 366, 89, 23);
 		consultaProdutos.add(btnRemoverProduto);
 		
@@ -134,7 +147,7 @@ public class ConsultarProdutoPanel extends JPanel {
 		if(produtos != null) {
 			for (Produto produto : produtos) {
 				System.out.println(produto.getNome());
-			modeloProdutos.addRow(new Object[]{produto.getId(), produto.getNome(), produto.getDescricao(), produto.getQuantidade(), produto.getValor(), produto.getTipo().getNome()});
+				modeloProdutos.addRow(new Object[]{produto.getId(), produto.getNome(), produto.getDescricao(), produto.getQuantidade(), produto.getValor(), produto.getTipo().getNome()});
 			}
 		}
 

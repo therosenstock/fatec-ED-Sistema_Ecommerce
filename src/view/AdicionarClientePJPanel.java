@@ -43,8 +43,8 @@ public class AdicionarClientePJPanel extends JPanel {
 	private JLabel lblTelefone;
 	private JLabel lblEmail;
 	private CriarClienteAction listener;
-	private List<PessoaJuridica> clientesPJ = new ArrayList<>();;
-	private List<PessoaFisica> clientesPF = new ArrayList<>();;
+	private List<PessoaJuridica> clientesPJ = new ArrayList<>();
+	private List<PessoaFisica> clientesPF = new ArrayList<>();
 
 	/**
 	 * Create the panel.

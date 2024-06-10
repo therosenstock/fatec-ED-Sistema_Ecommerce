@@ -183,10 +183,6 @@ public class TelaProdutos extends JFrame {
 
 		consultarProdutoPanel.setProduto(produtos);
 	}
-
-	public void setProduto(List<Produto> produto) {
-		this.produtos = produto;
-	}
 	
 	private void inicializarDados() {
 		inicializarTipos();
