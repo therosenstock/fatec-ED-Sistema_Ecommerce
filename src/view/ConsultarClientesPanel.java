@@ -6,6 +6,7 @@ import java.awt.Label;
 import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -17,9 +18,11 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import actions.RemoverClienteAction;
+import actions.RemoverProdutoAction;
 import actions.RemoverTipoProdutoAction;
 import model.PessoaFisica;
 import model.PessoaJuridica;
+import model.Produto;
 import model.TipoProduto;
 
 public class ConsultarClientesPanel extends JPanel {
@@ -32,6 +35,9 @@ public class ConsultarClientesPanel extends JPanel {
 	private RemoverClienteAction listener;
 	private DefaultTableModel modeloCliente;
 	private JTable tabelaCliente;
+	
+	private List<PessoaJuridica> clientesPJ = new ArrayList<>();
+	private List<PessoaFisica> clientesPF = new ArrayList<>();
 	/**
 	 * Create the panel.
 	 */
@@ -59,14 +65,28 @@ public class ConsultarClientesPanel extends JPanel {
 		buscaTxt.setBounds(28, 71, 464, 30);
 		this.add(buscaTxt);
 		
-		JLabel nomeLabel = new JLabel("Nome:");
-		nomeLabel.setBounds(28, 53, 46, 14);
+		JLabel nomeLabel = new JLabel("Documento ou Nome:");
+		nomeLabel.setBounds(28, 53, 184, 14);
 		this.add(nomeLabel);
 		
 		JButton buscarBtn = new JButton("Buscar");
 		buscarBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				modeloCliente.setRowCount(0);
+				String busca = buscaTxt.getText();
+
+				for (PessoaFisica pf : clientesPF) {
+					String doc = Long.toString(pf.getCpf());
+					if(pf.getNome().contains(buscaTxt.getText()) || doc.contains(buscaTxt.getText())) {
+						modeloCliente.addRow(new Object[]{pf.getCpf(), pf.getNome(), pf.getLogradouro(), pf.getTelefone()});
+					}
+				}
+				for (PessoaJuridica pj : clientesPJ) {
+					String doc = Long.toString(pj.getCnpj());
+					if(pj.getNomeFantasia().contains(buscaTxt.getText()) || doc.contains(buscaTxt.getText())) {
+						modeloCliente.addRow(new Object[]{pj.getCnpj(), pj.getNomeFantasia(), pj.getLogradouro(), pj.getTelefone()});
+					}
+				}
 				
 			}
 		});
@@ -85,8 +105,48 @@ public class ConsultarClientesPanel extends JPanel {
 		});
 		removerBtn.setBounds(496, 353, 89, 23);
 		this.add(removerBtn);
-		
+	}
+	
+	public void setClientesPf(List<PessoaFisica> cliente) {
+		this.clientesPF = cliente;
+	}
+	public void setClientesPj(List<PessoaJuridica> cliente) {
+		this.clientesPJ = cliente;
+	}
+	
+	public void addActionsListener(RemoverClienteAction listener) {
+		this.listener = listener;
+	}
+	
+	public void inicializarTabela() {
+		modeloCliente.setRowCount(0);
+		if(clientesPF != null) {
+			inicializarPF();
+		}
+		modeloCliente.setRowCount(0);
+		if(clientesPJ != null) {
+			inicializarPJ();
+		}
 
 	}
+
+	private void inicializarPJ() {
+		for (PessoaJuridica pj : clientesPJ) {
+			System.out.println(pj.getNomeFantasia());
+			modeloCliente.addRow(new Object[]{pj.getCnpj(), pj.getNomeFantasia(), pj.getLogradouro(), pj.getTelefone()});
+		}
+		
+	}
+
+	private void inicializarPF() {
+		for (PessoaFisica pf : clientesPF) {
+			System.out.println(pf.getNome());
+			modeloCliente.addRow(new Object[]{pf.getCpf(), pf.getNome(), pf.getLogradouro(), pf.getTelefone()});
+		}
+		
+	}
+	
+
+	
 
 }

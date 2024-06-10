@@ -2,12 +2,24 @@ package view;
 
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import actions.CriarClienteAction;
+import actions.CriarClientePFAction;
+import model.PessoaFisica;
+import model.PessoaJuridica;
+
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Panel;
 import java.awt.Color;
 import java.awt.Label;
 import java.awt.Font;
 import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+import java.awt.event.ActionEvent;
 
 public class AdicionarClientePFPanel extends JPanel {
 
@@ -19,6 +31,17 @@ public class AdicionarClientePFPanel extends JPanel {
 	private JTextField complementoTxt;
 	private JTextField cepTxt;
 	private JTextField telefoneTxt;
+	private JLabel lblNome;
+	private JLabel lblCpf;
+	private JLabel lblEndereco;
+	private JLabel lblNumero;
+	private JLabel lblComplemento;
+	private JLabel lblCep;
+	private JLabel lblTelefone;
+	private CriarClienteAction listener;
+	private List<PessoaJuridica> clientesPJ = new ArrayList<>();;
+	private List<PessoaFisica> clientesPF = new ArrayList<>();;
+
 
 	/**
 	 * Create the panel.
@@ -66,33 +89,33 @@ public class AdicionarClientePFPanel extends JPanel {
 		telefoneTxt.setBounds(442, 213, 167, 30);
 		cadastroClientePF.add(telefoneTxt);
 		
-		JLabel lblNewLabel = new JLabel("Nome Completo:");
-		lblNewLabel.setBounds(10, 78, 109, 14);
-		cadastroClientePF.add(lblNewLabel);
+		lblNome = new JLabel("Nome Completo:");
+		lblNome.setBounds(10, 78, 109, 14);
+		cadastroClientePF.add(lblNome);
 		
-		JLabel lblNewLabel_1 = new JLabel("CPF:");
-		lblNewLabel_1.setBounds(363, 78, 46, 14);
-		cadastroClientePF.add(lblNewLabel_1);
+		lblCpf = new JLabel("CPF:");
+		lblCpf.setBounds(363, 78, 46, 14);
+		cadastroClientePF.add(lblCpf);
 		
-		JLabel lblNewLabel_2 = new JLabel("Endereço:");
-		lblNewLabel_2.setBounds(10, 136, 136, 14);
-		cadastroClientePF.add(lblNewLabel_2);
+		lblEndereco = new JLabel("Endereço:");
+		lblEndereco.setBounds(10, 136, 136, 14);
+		cadastroClientePF.add(lblEndereco);
 		
-		JLabel lblNewLabel_3 = new JLabel("N°:");
-		lblNewLabel_3.setBounds(442, 136, 46, 14);
-		cadastroClientePF.add(lblNewLabel_3);
+		lblNumero = new JLabel("N°:");
+		lblNumero.setBounds(442, 136, 46, 14);
+		cadastroClientePF.add(lblNumero);
 		
-		JLabel lblNewLabel_4 = new JLabel("Complemento:");
-		lblNewLabel_4.setBounds(10, 196, 109, 14);
-		cadastroClientePF.add(lblNewLabel_4);
+		lblComplemento = new JLabel("Complemento:");
+		lblComplemento.setBounds(10, 196, 109, 14);
+		cadastroClientePF.add(lblComplemento);
 		
-		JLabel lblNewLabel_5 = new JLabel("CEP:");
-		lblNewLabel_5.setBounds(197, 196, 46, 14);
-		cadastroClientePF.add(lblNewLabel_5);
+		lblCep = new JLabel("CEP:");
+		lblCep.setBounds(197, 196, 46, 14);
+		cadastroClientePF.add(lblCep);
 		
-		JLabel lblNewLabel_6 = new JLabel("Telefone:");
-		lblNewLabel_6.setBounds(442, 196, 46, 14);
-		cadastroClientePF.add(lblNewLabel_6);
+		lblTelefone = new JLabel("Telefone:");
+		lblTelefone.setBounds(442, 196, 72, 14);
+		cadastroClientePF.add(lblTelefone);
 		
 		Panel panel_1_2 = new Panel();
 		panel_1_2.setBackground(new Color(234, 255, 215));
@@ -104,9 +127,105 @@ public class AdicionarClientePFPanel extends JPanel {
 		panel_1_2.add(label_2);
 		
 		JButton btnCadastrar = new JButton("Cadastrar");
-		btnCadastrar.setBounds(520, 283, 89, 30);
+		btnCadastrar.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(!validarFormulario()) return;
+				if(isCpfExistente(Long.parseLong(cpfTxt.getText()))) {
+					return;
+				}
+				PessoaFisica pf = new PessoaFisica();
+				pf.setNome(nomeTxt.getText());
+				pf.setCpf(Long.parseLong(cpfTxt.getText()));
+				pf.setLogradouro(enderecoTxt.getText());
+				pf.setNumero(Integer.parseInt(numeroTxt.getText()));
+				if(complementoTxt.getText().trim().isEmpty()) {
+					pf.setComplemento("Sem complemento");
+				}else {
+					pf.setComplemento(complementoTxt.getText());
+				}
+				pf.setCep(Integer.parseInt(cepTxt.getText()));
+				pf.setTelefone(Long.parseLong(telefoneTxt.getText()));
+				
+				listener.actionPerformed(pf);
+				
+				limparFormulario();
+			}
+		});
+		btnCadastrar.setBounds(463, 283, 146, 30);
 		cadastroClientePF.add(btnCadastrar);
 
 	}
+	
+	public void addActionsListener(CriarClienteAction listener) {
+		this.listener = listener;
+	}
+	
+	public boolean validarFormulario() {
+		if (this.nomeTxt.getText().equals("")) {
+			this.lblNome.setForeground(Color.RED);
+			return false;
+		}
+		if (this.cpfTxt.getText().equals("")) {
+			this.lblCpf.setForeground(Color.RED);
+			return false;
+		}
+		if (this.enderecoTxt.getText().equals("")) {
+			this.lblEndereco.setForeground(Color.RED);
+			return false;
+		}
+		if (this.numeroTxt.getText().equals("")) {
+			this.lblNumero.setForeground(Color.RED);
+			return false;
+		}
+		
+		if (this.cepTxt.getText().equals("")) {
+			this.lblCep.setForeground(Color.RED);
+			return false;
+		}
+		if (this.telefoneTxt.getText().equals("")) {
+			this.lblTelefone.setForeground(Color.RED);
+			return false;
+		}
+		
+		return true;
+	}
+	
+	
+    public void limparFormulario() {
+        cpfTxt.setText("");
+        nomeTxt.setText("");
+        enderecoTxt.setText("");
+        numeroTxt.setText("");
+        cepTxt.setText("");
+        complementoTxt.setText("");
+        telefoneTxt.setText("");
+    }
+    
+    private boolean isCpfExistente(long cpf) {
+
+        for (PessoaJuridica pj : clientesPJ) {
+            if (pj.getCnpj() == cpf) {
+            	JOptionPane.showMessageDialog(this, "CPF já cadastrado.", "Erro", JOptionPane.WARNING_MESSAGE);
+                return true;
+            }
+        }
+        for (PessoaFisica pf : clientesPF) {
+            if (pf.getCpf() == cpf) {
+            	JOptionPane.showMessageDialog(this, "CPF já cadastrado.", "Erro", JOptionPane.WARNING_MESSAGE);
+            	return true;
+            }
+        }
+        return false;
+    }
+    
+	public void setClientePJ(List<PessoaJuridica> cliente) {
+		this.clientesPJ = cliente;
+	}
+	public void setClientePF(List<PessoaFisica> cliente) {
+		this.clientesPF = cliente;
+	}
+	
+	
 
 }

@@ -6,7 +6,7 @@ public class Cliente {
 	private int numero;
 	private String complemento;
 	private int cep;
-	private int telefone;
+	private long telefone;
 
 	public String getLogradouro() {
 		return logradouro;
@@ -40,12 +40,12 @@ public class Cliente {
 		this.cep = cep;
 	}
 
-	public int getTelefone() {
+	public long getTelefone() {
 		return telefone;
 	}
 
-	public void setTelefone(int telefone) {
-		this.telefone = telefone;
+	public void setTelefone(long l) {
+		this.telefone = l;
 	}
 	
 	public String getNome() {

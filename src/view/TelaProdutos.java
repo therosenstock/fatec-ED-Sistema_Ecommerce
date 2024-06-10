@@ -169,7 +169,7 @@ public class TelaProdutos extends JFrame {
 		System.out.println(produto + " atualizando");
 		consultarProdutoPanel.setProduto(app.getProdutos());
 	}
-
+	
 	private void inicializarDados() {
 		app.inicializar();
 	}
