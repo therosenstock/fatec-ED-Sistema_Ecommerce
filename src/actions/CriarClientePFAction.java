@@ -6,9 +6,8 @@ import model.PessoaJuridica;
 import model.Produto;
 import model.TipoProduto;
 
-public interface CriarClienteAction {
+public interface CriarClientePFAction {
 
-	public void actionPerformed(PessoaJuridica cliente);
 	public void actionPerformed(PessoaFisica cliente);
 
 }

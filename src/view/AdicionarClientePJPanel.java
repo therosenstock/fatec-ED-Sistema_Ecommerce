@@ -2,8 +2,22 @@ package view;
 
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import actions.CriarClienteAction;
+import actions.CriarTipoProdutoAction;
+import model.PessoaFisica;
+import model.PessoaJuridica;
+import model.Produto;
+import model.TipoProduto;
+
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Panel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 import java.awt.Color;
 import java.awt.Label;
 import java.awt.Font;
@@ -15,11 +29,22 @@ public class AdicionarClientePJPanel extends JPanel {
 	private JTextField nomeFantasiaTxt;
 	private JTextField cnpjTxt;
 	private JTextField enderecoTxt;
-	private JTextField numeroTx6t;
+	private JTextField numeroTxt;
 	private JTextField complementoTxt;
 	private JTextField cepTxt;
 	private JTextField telefoneTxt;
 	private JTextField emailTxt;
+	private JLabel lblNomeFantasia;
+	private JLabel lblCnpj;
+	private JLabel lblEndereco;
+	private JLabel lblNumero;
+	private JLabel lblComplemento;
+	private JLabel lblCep;
+	private JLabel lblTelefone;
+	private JLabel lblEmail;
+	private CriarClienteAction listener;
+	private List<PessoaJuridica> clientesPJ = new ArrayList<>();;
+	private List<PessoaFisica> clientesPF = new ArrayList<>();;
 
 	/**
 	 * Create the panel.
@@ -47,10 +72,10 @@ public class AdicionarClientePJPanel extends JPanel {
 		enderecoTxt.setBounds(10, 155, 406, 30);
 		cadastroClientePJ.add(enderecoTxt);
 		
-		numeroTx6t = new JTextField();
-		numeroTx6t.setColumns(10);
-		numeroTx6t.setBounds(442, 155, 167, 30);
-		cadastroClientePJ.add(numeroTx6t);
+		numeroTxt = new JTextField();
+		numeroTxt.setColumns(10);
+		numeroTxt.setBounds(442, 155, 167, 30);
+		cadastroClientePJ.add(numeroTxt);
 		
 		complementoTxt = new JTextField();
 		complementoTxt.setColumns(10);
@@ -67,33 +92,36 @@ public class AdicionarClientePJPanel extends JPanel {
 		telefoneTxt.setBounds(442, 213, 167, 30);
 		cadastroClientePJ.add(telefoneTxt);
 		
-		JLabel lblNomeFantasial = new JLabel("Nome Fantasia:");
-		lblNomeFantasial.setBounds(10, 78, 109, 14);
-		cadastroClientePJ.add(lblNomeFantasial);
+		lblNomeFantasia = new JLabel("Nome Fantasia:");
+		lblNomeFantasia.setBounds(10, 78, 109, 14);
+		cadastroClientePJ.add(lblNomeFantasia);
 		
-		JLabel lblNewLabel_1_1 = new JLabel("CNPJ:");
-		lblNewLabel_1_1.setBounds(363, 78, 46, 14);
-		cadastroClientePJ.add(lblNewLabel_1_1);
+		lblCnpj = new JLabel("CNPJ:");
+		lblCnpj.setBounds(363, 78, 46, 14);
+		cadastroClientePJ.add(lblCnpj);
+		lblEndereco = new JLabel("Endereço:");
+		lblEndereco.setBounds(10, 136, 136, 14);
+		cadastroClientePJ.add(lblEndereco);
 		
-		JLabel lblNewLabel_2_1 = new JLabel("Endereço:");
-		lblNewLabel_2_1.setBounds(10, 136, 136, 14);
-		cadastroClientePJ.add(lblNewLabel_2_1);
+		lblNumero = new JLabel("N°:");
+		lblNumero.setBounds(442, 136, 46, 14);
+		cadastroClientePJ.add(lblNumero);
 		
-		JLabel lblNewLabel_3_1 = new JLabel("N°:");
-		lblNewLabel_3_1.setBounds(442, 136, 46, 14);
-		cadastroClientePJ.add(lblNewLabel_3_1);
+		lblComplemento = new JLabel("Complemento:");
+		lblComplemento.setBounds(10, 196, 109, 14);
+		cadastroClientePJ.add(lblComplemento);
 		
-		JLabel lblNewLabel_4_1 = new JLabel("Complemento:");
-		lblNewLabel_4_1.setBounds(10, 196, 109, 14);
-		cadastroClientePJ.add(lblNewLabel_4_1);
+		lblCep = new JLabel("CEP:");
+		lblCep.setBounds(197, 196, 46, 14);
+		cadastroClientePJ.add(lblCep);
 		
-		JLabel lblNewLabel_5_1 = new JLabel("CEP:");
-		lblNewLabel_5_1.setBounds(197, 196, 46, 14);
-		cadastroClientePJ.add(lblNewLabel_5_1);
-		
-		JLabel lblNewLabel_6_1 = new JLabel("Telefone:");
-		lblNewLabel_6_1.setBounds(442, 196, 46, 14);
-		cadastroClientePJ.add(lblNewLabel_6_1);
+		lblTelefone = new JLabel("Telefone:");
+		lblTelefone.setBounds(442, 196, 86, 14);
+		cadastroClientePJ.add(lblTelefone);
+				
+		lblEmail = new JLabel("E-mail:");
+		lblEmail.setBounds(10, 254, 46, 14);
+		cadastroClientePJ.add(lblEmail);
 		
 		Panel panel_1_2_1 = new Panel();
 		panel_1_2_1.setBackground(new Color(234, 255, 215));
@@ -105,7 +133,38 @@ public class AdicionarClientePJPanel extends JPanel {
 		panel_1_2_1.add(label_2_1);
 		
 		JButton btnCadastrar = new JButton("Cadastrar");
-		btnCadastrar.setBounds(520, 315, 89, 30);
+		btnCadastrar.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(!validarFormulario()) return;
+				if(isCnpjExistente(Long.parseLong(cnpjTxt.getText()))) {
+					return;
+				}
+				PessoaJuridica pj = new PessoaJuridica();
+				pj.setCnpj(Long.parseLong(cnpjTxt.getText()));
+				pj.setNomeFantasia(nomeFantasiaTxt.getText());
+				pj.setLogradouro(enderecoTxt.getText());
+				pj.setNumero(Integer.parseInt(numeroTxt.getText()));
+				pj.setCep(Integer.parseInt(cepTxt.getText()));
+		
+				if(complementoTxt.getText().trim().isEmpty()) {
+					pj.setComplemento("Sem complemento");
+					System.out.println("sem");
+				}else {
+					pj.setComplemento(complementoTxt.getText());
+					System.out.println("com");
+				}
+				pj.setTelefone(Long.parseLong(telefoneTxt.getText()));
+				pj.setEmail(emailTxt.getText());
+				
+				
+				listener.actionPerformed(pj);
+				limparFormulario();
+				
+			}
+		});
+		btnCadastrar.setBounds(461, 315, 148, 30);
 		cadastroClientePJ.add(btnCadastrar);
 		
 		emailTxt = new JTextField();
@@ -113,9 +172,79 @@ public class AdicionarClientePJPanel extends JPanel {
 		cadastroClientePJ.add(emailTxt);
 		emailTxt.setColumns(10);
 		
-		JLabel lblNewLabel = new JLabel("E-mail:");
-		lblNewLabel.setBounds(10, 254, 46, 14);
-		cadastroClientePJ.add(lblNewLabel);
-
 	}
+	
+	public boolean validarFormulario() {
+		if (this.nomeFantasiaTxt.getText().equals("")) {
+			this.lblNomeFantasia.setForeground(Color.RED);
+			return false;
+		}
+		if (this.cnpjTxt.getText().equals("")) {
+			this.lblCnpj.setForeground(Color.RED);
+			return false;
+		}
+		if (this.enderecoTxt.getText().equals("")) {
+			this.lblEndereco.setForeground(Color.RED);
+			return false;
+		}
+		if (this.numeroTxt.getText().equals("")) {
+			this.lblNumero.setForeground(Color.RED);
+			return false;
+		}
+		
+		if (this.cepTxt.getText().equals("")) {
+			this.lblCep.setForeground(Color.RED);
+			return false;
+		}
+		if (this.telefoneTxt.getText().equals("")) {
+			this.lblTelefone.setForeground(Color.RED);
+			return false;
+		}
+		if (this.emailTxt.getText().equals("")) {
+			this.lblEmail.setForeground(Color.RED);
+			return false;
+		}
+		
+		return true;
+	}
+	
+	public void addActionsListener(CriarClienteAction listener) {
+		this.listener = listener;
+	}
+	
+    public void limparFormulario() {
+        cnpjTxt.setText("");
+        nomeFantasiaTxt.setText("");
+        enderecoTxt.setText("");
+        numeroTxt.setText("");
+        cepTxt.setText("");
+        complementoTxt.setText("");
+        telefoneTxt.setText("");
+        emailTxt.setText("");
+    }
+    
+    private boolean isCnpjExistente(long cnpj) {
+
+        for (PessoaJuridica pj : clientesPJ) {
+            if (pj.getCnpj() == cnpj) {
+            	JOptionPane.showMessageDialog(this, "CNPJ já cadastrado.", "Erro", JOptionPane.WARNING_MESSAGE);
+                return true;
+            }
+        }
+        for (PessoaFisica pf : clientesPF) {
+            if (pf.getCpf() == cnpj) {
+            	JOptionPane.showMessageDialog(this, "CNPJ já cadastrado.", "Erro", JOptionPane.WARNING_MESSAGE);
+            	return true;
+            }
+        }
+        return false;
+    }
+    
+	public void setClientePJ(List<PessoaJuridica> cliente) {
+		this.clientesPJ = cliente;
+	}
+	public void setClientePF(List<PessoaFisica> cliente) {
+		this.clientesPF = cliente;
+	}
+
 }
