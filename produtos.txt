@@ -1,1 +1,4 @@
-1717546760717;Teclado rosa;Teclado rosa rgb mecanico;23;200.0;1717528300793;produtos ao consumidor
+1717974435949;Arroz;arroz branco 5kg do RS;10;22.0;1717974387311;bens perecíveis;bens que se deteriorarão rapidamente mesmo sem uso
+1717974462123;Feijão;Feijão carioca 1kg;20;7.0;1717974387311;bens perecíveis;bens que se deteriorarão rapidamente mesmo sem uso
+1717974485939;Batom vermelho;batom vermelho da boticario;5;50.0;1717974310563;produtos ao consumidor;usados por usuários-finais
+1717974509203;protetor solar;protetor solar la roche posey;7;80.0;1717972204429;bens de conveniência;adquiridos frequentemente e com um esforço mínimo

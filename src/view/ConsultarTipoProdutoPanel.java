@@ -39,6 +39,7 @@ public class ConsultarTipoProdutoPanel extends JPanel {
 		
 		this.setLayout(null);
 		modeloTipos = new DefaultTableModel(new Object[]{"ID", "Tipo", "Descrição"}, 0);
+		this.inicializarTabela();
 		tabelaTipos = new JTable(modeloTipos);
 		JScrollPane scrollTipos = new JScrollPane(tabelaTipos);
 		scrollTipos.setBounds(28, 112, 557, 231);
@@ -95,7 +96,7 @@ public class ConsultarTipoProdutoPanel extends JPanel {
 		removerBtn.setBounds(496, 353, 89, 23);
 		this.add(removerBtn);
 		
-		this.inicializarTabela();
+
 	}
 	
 	public void setTiposProduto(List<TipoProduto> tiposProduto) {
@@ -109,9 +110,9 @@ public class ConsultarTipoProdutoPanel extends JPanel {
 	public void inicializarTabela() {
 		modeloTipos.setRowCount(0);
 		if(tiposProduto != null) {
-		for (TipoProduto tipo : tiposProduto) {
-			modeloTipos.addRow(new Object[]{tipo.getId(), tipo.getNome(), tipo.getDescricao()});
-		}
+			for (TipoProduto tipo : tiposProduto) {
+				modeloTipos.addRow(new Object[]{tipo.getId(), tipo.getNome(), tipo.getDescricao()});
+			}
 		}
 	}
 }

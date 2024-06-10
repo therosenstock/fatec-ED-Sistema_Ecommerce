@@ -72,7 +72,7 @@ public class ConsultarProdutoPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				modeloProdutos.setRowCount(0);
 				for (Produto produto : produtos) {
-					if (produto.getNome().contains(btnBuscarProduto.getText())) {
+					if (produto.getNome().contains(nomeTxt.getText())) {
 						modeloProdutos.addRow(new Object[]{produto.getId(), produto.getNome(), produto.getDescricao(), produto.getQuantidade(), produto.getValor(), produto.getTipo().getNome()});
 					}
 				}
@@ -95,8 +95,10 @@ public class ConsultarProdutoPanel extends JPanel {
 		btnFiltrarProduto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				modeloProdutos.setRowCount(0);
+				String texto = tipoCbx.getSelectedItem().toString();
+				System.out.println(texto+ "texto da cbx");
 				for (Produto produto : produtos) {
-					if (produto.getTipo().getNome().contains((String) tipoCbx.getSelectedItem())) {
+					if (produto.getTipo().getNome().contains(texto)) {
 						modeloProdutos.addRow(new Object[]{produto.getId(), produto.getNome(), produto.getDescricao(), produto.getQuantidade(), produto.getValor(), produto.getTipo().getNome()});
 					}
 				}
@@ -113,6 +115,8 @@ public class ConsultarProdutoPanel extends JPanel {
 		tipoCbx.setBounds(332, 71, 163, 30);
 		consultaProdutos.add(tipoCbx);
 		tipoCbx.setModel(cbxModelo);
+		
+		inicializarTabela();
 
 	}
 	
@@ -126,8 +130,10 @@ public class ConsultarProdutoPanel extends JPanel {
 	
 	public void inicializarTabela() {
 		modeloProdutos.setRowCount(0);
+		System.out.println("inicializei produto" + produtos);
 		if(produtos != null) {
 			for (Produto produto : produtos) {
+				System.out.println(produto.getNome());
 			modeloProdutos.addRow(new Object[]{produto.getId(), produto.getNome(), produto.getDescricao(), produto.getQuantidade(), produto.getValor(), produto.getTipo().getNome()});
 			}
 		}

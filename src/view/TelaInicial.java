@@ -51,7 +51,7 @@ public class TelaInicial extends JFrame {
 		var self = this;
 		btnCompras.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				var novaTela = new TelaCliente();
+				var novaTela = new TelaCompras();
 				novaTela.setVisible(true);
 				self.setVisible(false);
 			}
