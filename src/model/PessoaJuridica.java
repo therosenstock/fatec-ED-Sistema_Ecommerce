@@ -6,6 +6,10 @@ public class PessoaJuridica extends Cliente{
 	private long cnpj;
 	private String email;
 	
+	public PessoaJuridica() {
+		this.tipo = "PJ";
+	}
+	
 	public String getNomeFantasia() {
 		return nomeFantasia;
 	}
@@ -37,6 +41,11 @@ public class PessoaJuridica extends Cliente{
 	
 	public String toString() {
 		return nomeFantasia;
+	}
+	
+	@Override
+	public long getDocumento() {
+		return cnpj;
 	}
 	
 }

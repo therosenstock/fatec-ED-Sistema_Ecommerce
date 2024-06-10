@@ -8,6 +8,7 @@ import java.awt.Color;
 import java.awt.Label;
 import java.awt.Font;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
@@ -76,6 +77,7 @@ public class CarrinhoPanel extends JPanel {
 		esvaziarBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				esvaziarListener.actionPerformed();
+				JOptionPane.showMessageDialog(null, "Carrinho esvaziado");
 			}
 		});
 		
@@ -90,8 +92,14 @@ public class CarrinhoPanel extends JPanel {
 				int linha = carrinhoTable.getSelectedRow();
 				if (linha == -1) return;
 				long id = Long.parseLong(carrinhoTableModel.getValueAt(linha, 0).toString());
-				CarrinhoProduto item = carrinho.getItens().stream().filter(i -> i.getId() == id).findFirst().orElse(null);
-				removeListener.actionPerformed(item);
+				
+				for (CarrinhoProduto item :  carrinho.getItens()) {
+					if (item.getId() == id) {
+						removeListener.actionPerformed(item);
+						JOptionPane.showMessageDialog(null, "Produto excluído");
+						return;
+					}
+				}
 			}
 		});
 		
@@ -120,6 +128,7 @@ public class CarrinhoPanel extends JPanel {
 			carrinhoTableModel.addRow(new Object[] {item.getId(), produto.getNome(), valor, quantidade});
 			total += valor * quantidade;
 		}
+		
 		totalLabel.setText("R$ " + total);
 	}
 	

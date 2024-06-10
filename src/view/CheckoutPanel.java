@@ -10,9 +10,12 @@ import java.awt.Label;
 import java.awt.Font;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableModel;
 
 import actions.FinalizarAction;
+import estrutura.PilhaToFila;
 import model.Carrinho;
 import model.CarrinhoProduto;
 import model.Cliente;
@@ -22,15 +25,15 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
+import javax.swing.JTable;
 import javax.swing.JComboBox;
 
 public class CheckoutPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private List<Cliente> clientes;
-	private DefaultListModel<Produto> produtoListModel = new DefaultListModel<Produto>();
 	private DefaultComboBoxModel<Cliente> clienteComboBoxModel = new DefaultComboBoxModel<Cliente>();
+	private DefaultTableModel checkoutTableModel = new DefaultTableModel(new Object[] { "Produto", "Total" }, 0);
 	private JLabel valorLabel;
 	private Carrinho carrinho;
 	private FinalizarAction listener;
@@ -71,14 +74,24 @@ public class CheckoutPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Cliente cliente = (Cliente) clienteComboBoxModel.getSelectedItem();
-				if (cliente == null) return;
+				
+				if (carrinho.getItens().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Adicione um produto", "Adicione um produto", JOptionPane.WARNING_MESSAGE);
+					return;
+				}
+				
+				if (cliente == null) {
+					JOptionPane.showMessageDialog(null, "Selecione um cliente", "Selecione um cliente", JOptionPane.WARNING_MESSAGE);
+					return;
+				}
 				carrinho.setCliente(cliente);
 				listener.actionPerformed();
+				JOptionPane.showMessageDialog(null, "Compra finalizada!");
 			}
 		});
 		
-		JList<Produto> checkoutList = new JList<Produto>(produtoListModel);
-		JScrollPane scrollCheckout = new JScrollPane(checkoutList);
+		JTable checkoutTable = new JTable(checkoutTableModel);
+		JScrollPane scrollCheckout = new JScrollPane(checkoutTable);
 		scrollCheckout.setBounds(20, 69, 577, 199);
 		add(scrollCheckout);
 		
@@ -93,21 +106,20 @@ public class CheckoutPanel extends JPanel {
 	
 	public void setCarrinho(Carrinho carrinho) {
 		this.carrinho = carrinho;
-		produtoListModel.clear();
-		
-		double total = 0;
-		for (CarrinhoProduto item : carrinho.getItens()) {
+		checkoutTableModel.setRowCount(0);
+
+		for (CarrinhoProduto item : PilhaToFila.transformar(carrinho.getItens())) {
 			Produto produto = item.getProduto();
-			produtoListModel.addElement(produto);
-			total += produto.getValor() * item.getQuantidade();
+			checkoutTableModel.addRow(new Object[] { produto.getNome(), produto.getValor() * item.getQuantidade() });
 		}
-		valorLabel.setText("R$"  + total);
+		valorLabel.setText("R$"  + carrinho.getTotal());
 		
 	}
 	
 	public void setClientes(List<Cliente> clientes) {
 		this.clientes = clientes;
 		clienteComboBoxModel.removeAllElements();
+		clienteComboBoxModel.addElement(null);
 		
 		for (Cliente cliente : clientes) {
 			clienteComboBoxModel.addElement(cliente);

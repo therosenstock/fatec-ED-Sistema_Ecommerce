@@ -4,17 +4,13 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableModel;
 
 import actions.CriarClienteAction;
+import actions.RemoverClienteAction;
+import app.App;
 
 import javax.swing.JTabbedPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.JLabel;
-import java.awt.Panel;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -23,15 +19,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.awt.Color;
-import java.awt.Label;
-import java.awt.Font;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
+
 import model.Cliente;
 import model.PessoaFisica;
 import model.PessoaJuridica;
-import model.TipoProduto;
 
 public class TelaCliente extends JFrame {
 
@@ -46,6 +37,7 @@ public class TelaCliente extends JFrame {
 	private AdicionarClientePFPanel adicionarClientePF;
 	private AdicionarClientePJPanel adicionarClientePJ;
 	private File arquivoClientes = new File("clientes.txt");
+	private App app = App.getApp();
 	private static int CLOSE_OPERATION = JFrame.DISPOSE_ON_CLOSE;
 
 	/**
@@ -72,7 +64,8 @@ public class TelaCliente extends JFrame {
 		setTitle("Área de Clientes");
 		setDefaultCloseOperation(CLOSE_OPERATION);
 		setBounds(100, 100, 640, 480);
-		inicializarListas();	
+		setResizable(false);
+		app.inicializar();
 
 		 
 		contentPane = new JPanel();
@@ -89,26 +82,30 @@ public class TelaCliente extends JFrame {
 		adicionarClientePF = new AdicionarClientePFPanel();
 		adicionarClientePJ = new AdicionarClientePJPanel();
 		
-		adicionarClientePF.setClientePF(clientesPf);
-		adicionarClientePF.setClientePJ(clientesPj);
-		adicionarClientePJ.setClientePF(clientesPf);
-		adicionarClientePJ.setClientePJ(clientesPj);
-		consultarClientesPanel.setClientesPf(clientesPf);
-		consultarClientesPanel.setClientesPj(clientesPj);
+		adicionarClientePF.setClientes(app.getClientes());
+		adicionarClientePJ.setClientes(app.getClientes());
+		consultarClientesPanel.setClientes(app.getClientes());
 		//funçoes de set
 		tabbedPane.addTab("Consultar Clientes", null, consultarClientesPanel, null);
 		tabbedPane.addTab("Cadastro de Pessoa Física", null, adicionarClientePF, null);
 		tabbedPane.addTab("Cadastro de Pessoa Jurídica", null, adicionarClientePJ, null);
 		
+		
+		consultarClientesPanel.addActionsListener(new RemoverClienteAction() {
+			
+			@Override
+			public void actionPerformed(Cliente cliente) {
+				app.getClientes().remove(cliente);
+				atualizarClientes();
+			}
+		});
+		
 		adicionarClientePJ.addActionsListener(new CriarClienteAction() {
 			
 			@Override
 			public void actionPerformed(PessoaJuridica cliente) {
-			
 				clientesPj.add(cliente);
 				atualizarClientePj(cliente);
-				
-				
 			}
 
 			@Override
@@ -130,8 +127,11 @@ public class TelaCliente extends JFrame {
 			}
 
 		});
+	}
 	
-
+	private void atualizarClientes() {
+		consultarClientesPanel.setClientes(app.getClientes());
+		adicionarClientePF.setClientes(app.getClientes());
 	}
 	
 	private void atualizarClientePj(PessoaJuridica cliente) {
@@ -147,11 +147,11 @@ public class TelaCliente extends JFrame {
 			e.printStackTrace();
 		}
 
-		adicionarClientePF.setClientePJ(clientesPj);
-		adicionarClientePJ.setClientePJ(clientesPj);
-		consultarClientesPanel.setClientesPj(clientesPj);
-		
+		adicionarClientePF.setClientes(app.getClientes());
+		adicionarClientePJ.setClientes(app.getClientes());
+		consultarClientesPanel.setClientes(app.getClientes());
 	}
+
 	private void atualizarClientePf(PessoaFisica cliente) {
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(arquivoClientes, true))){
 			writer.write(cliente.getCpf() + ";" + cliente.getNome() 
@@ -164,56 +164,9 @@ public class TelaCliente extends JFrame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		adicionarClientePF.setClientePF(clientesPf);
-		adicionarClientePJ.setClientePF(clientesPf);
-		consultarClientesPanel.setClientesPf(clientesPf);
-
 		
+		adicionarClientePF.setClientes(app.getClientes());
+		adicionarClientePJ.setClientes(app.getClientes());
+		consultarClientesPanel.setClientes(app.getClientes());
 	}
-	
-	private void inicializarListas() {
-		try (BufferedReader reader = new BufferedReader(new FileReader(arquivoClientes))) {
-			String line;
-			while ((line = reader.readLine()) != null) {
-				var dados = line.split(";");
-				int tamanho = dados.length;
-				
-				if(tamanho == 7) {
-					PessoaFisica pf = new PessoaFisica();
-					pf.setCpf(Long.parseLong(dados[0]));
-					pf.setNome(dados[1]);
-					pf.setLogradouro(dados[2]);
-					pf.setNumero(Integer.parseInt(dados[3]));
-					pf.setComplemento(dados[4]);
-					pf.setCep(Integer.parseInt(dados[5]));
-					pf.setTelefone(Long.parseLong(dados[6]));
-					System.out.println(pf.getNome() + " pf");
-					clientesPf.add(pf);
-
-				} else {
-					PessoaJuridica pj = new PessoaJuridica();
-					pj.setCnpj(Long.parseLong(dados[0]));
-					pj.setNomeFantasia(dados[1]);
-					pj.setLogradouro(dados[2]);
-					pj.setNumero(Integer.parseInt(dados[3]));
-					pj.setComplemento(dados[4]);
-					pj.setCep(Integer.parseInt(dados[5]));
-					pj.setTelefone(Long.parseLong(dados[6]));
-					pj.setEmail(dados[7]);
-					System.out.println(pj.getNomeFantasia());
-					
-					clientesPj.add(pj);
-					
-				}
-			}
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
-	
-	
-
 }

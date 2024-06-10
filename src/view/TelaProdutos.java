@@ -77,7 +77,7 @@ public class TelaProdutos extends JFrame {
 	 */
 	public TelaProdutos() {
 		inicializarDados();
-
+		setResizable(false);
 		setTitle("Área de Estoque");
 		setDefaultCloseOperation(CLOSE_OPERATION);
 		setBounds(100, 100, 640, 480);

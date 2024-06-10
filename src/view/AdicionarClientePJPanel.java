@@ -5,6 +5,7 @@ import javax.swing.JTextField;
 
 import actions.CriarClienteAction;
 import actions.CriarTipoProdutoAction;
+import model.Cliente;
 import model.PessoaFisica;
 import model.PessoaJuridica;
 import model.Produto;
@@ -43,8 +44,7 @@ public class AdicionarClientePJPanel extends JPanel {
 	private JLabel lblTelefone;
 	private JLabel lblEmail;
 	private CriarClienteAction listener;
-	private List<PessoaJuridica> clientesPJ = new ArrayList<>();
-	private List<PessoaFisica> clientesPF = new ArrayList<>();
+	private List<Cliente> clientes;
 
 	/**
 	 * Create the panel.
@@ -224,27 +224,18 @@ public class AdicionarClientePJPanel extends JPanel {
     }
     
     private boolean isCnpjExistente(long cnpj) {
-
-        for (PessoaJuridica pj : clientesPJ) {
-            if (pj.getCnpj() == cnpj) {
-            	JOptionPane.showMessageDialog(this, "CNPJ já cadastrado.", "Erro", JOptionPane.WARNING_MESSAGE);
+    	
+    	for (Cliente cliente : clientes) {
+    		if (cliente.getDocumento() == cnpj) {
+    			JOptionPane.showMessageDialog(this, "CNPJ já cadastrado.", "Erro", JOptionPane.WARNING_MESSAGE);
                 return true;
-            }
-        }
-        for (PessoaFisica pf : clientesPF) {
-            if (pf.getCpf() == cnpj) {
-            	JOptionPane.showMessageDialog(this, "CNPJ já cadastrado.", "Erro", JOptionPane.WARNING_MESSAGE);
-            	return true;
-            }
-        }
+    		}
+    	}
+
         return false;
     }
     
-	public void setClientePJ(List<PessoaJuridica> cliente) {
-		this.clientesPJ = cliente;
-	}
-	public void setClientePF(List<PessoaFisica> cliente) {
-		this.clientesPF = cliente;
-	}
-
+    public void setClientes(List<Cliente> clientes) {
+    	this.clientes = clientes;
+    }
 }

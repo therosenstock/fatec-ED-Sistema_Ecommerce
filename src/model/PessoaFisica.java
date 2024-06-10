@@ -1,9 +1,13 @@
 package model;
 
-public class PessoaFisica extends Cliente{
+public class PessoaFisica extends Cliente {
 	
 	private String nome;
 	private long cpf;
+	
+	public PessoaFisica() {
+		this.tipo = "PF";
+	}
 	
 	@Override
 	public String getNome() {
@@ -24,6 +28,11 @@ public class PessoaFisica extends Cliente{
 	
 	public String toString() {
 		return nome;
+	}
+	
+	@Override
+	public long getDocumento() {
+		return cpf;
 	}
 
 }

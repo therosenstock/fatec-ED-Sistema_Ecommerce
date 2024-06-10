@@ -15,8 +15,6 @@ import app.App;
 import model.CarrinhoProduto;
 
 import javax.swing.JTabbedPane;
-import javax.swing.JTextField;
-import javax.swing.JTable;
 
 public class TelaCompras extends JFrame {
 
@@ -51,6 +49,7 @@ public class TelaCompras extends JFrame {
 	 */
 	public TelaCompras() {
 		app.inicializar();
+		setResizable(false);
 		setDefaultCloseOperation(CLOSE_OPERATION);
 		setBounds(100, 100, 640, 480);
 		contentPane = new JPanel();
@@ -135,6 +134,7 @@ public class TelaCompras extends JFrame {
 	private void atualizarCarrinho() {
 		carrinhoPanel.setCarrinho(app.getCarrinho());
 		checkout.setCarrinho(app.getCarrinho());
+		produtosPanel.setProdutos(app.getProdutos());
 	}
 	
 	private void atualizarHistorico() {

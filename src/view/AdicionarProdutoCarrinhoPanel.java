@@ -21,6 +21,7 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import actions.AdicionarCarrinhoProdutoAction;
+import estrutura.TabelaEspalhamento;
 
 import javax.swing.JOptionPane;
 
@@ -36,8 +37,8 @@ public class AdicionarProdutoCarrinhoPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private List<Produto> produtos;
-	private HashMap<Long, List<Produto>> produtoHash = new HashMap<Long, List<Produto>>();
-	private DefaultTableModel produtoTableModel = new DefaultTableModel(new Object[]{"ID", "Nome", "Tipo"}, 0);
+	private TabelaEspalhamento<List<Produto>> produtoHash = new TabelaEspalhamento<List<Produto>>();
+	private DefaultTableModel produtoTableModel = new DefaultTableModel(new Object[]{"ID", "Nome", "Tipo", "Quantidade"}, 0);
 	private Produto produtoSelecionado;
 	private Carrinho carrinho;
 	private AdicionarCarrinhoProdutoAction listener;
@@ -89,6 +90,7 @@ public class AdicionarProdutoCarrinhoPanel extends JPanel {
 		add(tiposLabel);
 		
 		JTable produtosTable = new JTable(produtoTableModel);
+//		produtosTable.setEnabled(false);
 		JScrollPane scrollCatalogo = new JScrollPane(produtosTable);
 		//table_produtos.setBounds(35, 161, 541, 175);
 		scrollCatalogo.setBounds(35, 136, 541, 200);
@@ -114,14 +116,16 @@ public class AdicionarProdutoCarrinhoPanel extends JPanel {
 	
 	public void setProdutos(List<Produto> produtos) {
 		this.produtos = produtos;
+		produtoTableModel.setRowCount(0);
+		produtoHash = new TabelaEspalhamento<List<Produto>>();
 		
 		for (Produto produto : produtos) {
-			produtoTableModel.addRow(new Object[] { produto.getId(), produto.getNome(), produto.getTipo().getNome() });
+			inserirTabela(produto);
 			
-			long chave = produto.getTipo().getId();
+			String chave = produto.getTipo().getId() + "";
 			
-			if (!produtoHash.containsKey(chave)) {
-				produtoHash.put(chave, new ArrayList<Produto>());
+			if (!produtoHash.has(chave)) {
+				produtoHash.set(chave, new ArrayList<Produto>());
 			}
 			
 			produtoHash.get(chave).add(produto);
@@ -145,13 +149,19 @@ public class AdicionarProdutoCarrinhoPanel extends JPanel {
 		List<Produto> lista;
 		
 		if (tipo == null) lista = produtos;
-		else lista = produtoHash.get(tipo.getId());
+		else lista = produtoHash.get(tipo.getId() + "");
+		
+		if (lista == null) return;
 		
 		for (Produto produto : lista) {
 			if (produto.getNome().contains(produtoTxt.getText())) {
-				produtoTableModel.addRow(new Object[] { produto.getId(), produto.getNome(), produto.getTipo().getNome() });
+				inserirTabela(produto);
 			}
 		}
+	}
+	
+	private void inserirTabela(Produto produto) {
+		produtoTableModel.addRow(new Object[] { produto.getId(), produto.getNome(), produto.getTipo().getNome(), produto.getQuantidade() });
 	}
 	
     private void showDialog() {
@@ -171,11 +181,18 @@ public class AdicionarProdutoCarrinhoPanel extends JPanel {
         
         okButton.addActionListener(e -> {
             int quantidade = Integer.parseInt(quantidadeTxt.getText());
-            JOptionPane.showMessageDialog(dialog, "Produto adicionado");
             CarrinhoProduto item = new CarrinhoProduto();
-            item.setProduto(produtoSelecionado);
-            item.setQuantidade(quantidade);
-            listener.actionPerformed(item);
+            
+            if (produtoSelecionado.getQuantidade() < quantidade) {
+            	JOptionPane.showMessageDialog(dialog, "Não temos a quantidade digitada", "Erro ao adicionar o produto", JOptionPane.ERROR_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(dialog, "Produto adicionado");
+                item.setProduto(produtoSelecionado);
+                item.setQuantidade(quantidade);
+                produtoSelecionado.setQuantidade(produtoSelecionado.getQuantidade() - quantidade);
+                listener.actionPerformed(item);
+            }
+
             dialog.dispose();
         });
 

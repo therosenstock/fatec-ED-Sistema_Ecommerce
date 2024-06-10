@@ -7,6 +7,7 @@ public class Cliente {
 	private String complemento;
 	private int cep;
 	private long telefone;
+	protected String tipo;
 
 	public String getLogradouro() {
 		return logradouro;
@@ -50,6 +51,14 @@ public class Cliente {
 	
 	public String getNome() {
 		throw new RuntimeException("Deve ser implementado em uma classe filha");
+	}
+	
+	public long getDocumento() {
+		throw new RuntimeException("Deve ser implementado em uma classe filha");
+	}
+	
+	public String getTipo() {
+		return tipo;
 	}
 
 }

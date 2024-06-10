@@ -20,6 +20,7 @@ import javax.swing.table.DefaultTableModel;
 import actions.RemoverClienteAction;
 import actions.RemoverProdutoAction;
 import actions.RemoverTipoProdutoAction;
+import model.Cliente;
 import model.PessoaFisica;
 import model.PessoaJuridica;
 import model.Produto;
@@ -30,14 +31,12 @@ public class ConsultarClientesPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private JTextField buscaTxt;
-	private List<PessoaFisica> clientePF;
-	private List<PessoaJuridica> clientePJ;
 	private RemoverClienteAction listener;
 	private DefaultTableModel modeloCliente;
 	private JTable tabelaCliente;
+
+	private List<Cliente> clientes;
 	
-	private List<PessoaJuridica> clientesPJ = new ArrayList<>();
-	private List<PessoaFisica> clientesPF = new ArrayList<>();
 	/**
 	 * Create the panel.
 	 */
@@ -74,20 +73,15 @@ public class ConsultarClientesPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				modeloCliente.setRowCount(0);
 				String busca = buscaTxt.getText();
-
-				for (PessoaFisica pf : clientesPF) {
-					String doc = Long.toString(pf.getCpf());
-					if(pf.getNome().contains(buscaTxt.getText()) || doc.contains(buscaTxt.getText())) {
-						modeloCliente.addRow(new Object[]{pf.getCpf(), pf.getNome(), pf.getLogradouro(), pf.getTelefone()});
-					}
-				}
-				for (PessoaJuridica pj : clientesPJ) {
-					String doc = Long.toString(pj.getCnpj());
-					if(pj.getNomeFantasia().contains(buscaTxt.getText()) || doc.contains(buscaTxt.getText())) {
-						modeloCliente.addRow(new Object[]{pj.getCnpj(), pj.getNomeFantasia(), pj.getLogradouro(), pj.getTelefone()});
-					}
-				}
 				
+				for (Cliente cliente : clientes) {
+					String documento = Long.toString(cliente.getDocumento());
+					String nome = cliente.getNome();
+					
+					if(nome.toUpperCase().contains(buscaTxt.getText().toUpperCase()) || documento.contains(buscaTxt.getText())) {
+						inserirTabela(cliente);
+					}
+				}
 			}
 		});
 		
@@ -98,55 +92,34 @@ public class ConsultarClientesPanel extends JPanel {
 		removerBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int linha = tabelaCliente.getSelectedRow();
-				long id = Long.parseLong(modeloCliente.getValueAt(linha, 0).toString());
-				modeloCliente.removeRow(linha);
+				if (linha == -1) return;
 				
+				long documento = Long.parseLong(modeloCliente.getValueAt(linha, 0).toString());
+				Cliente cliente = clientes.stream().filter(c -> c.getDocumento() == documento).findFirst().orElse(null);
+				listener.actionPerformed(cliente);
+				modeloCliente.removeRow(linha);
 			}
 		});
 		removerBtn.setBounds(496, 353, 89, 23);
 		this.add(removerBtn);
 	}
 	
-	public void setClientesPf(List<PessoaFisica> cliente) {
-		this.clientesPF = cliente;
+	public void setClientes(List<Cliente> clientes) {
+		this.clientes = clientes;
+		
+		modeloCliente.setRowCount(0);
+		
+		for (Cliente cliente : clientes) {
+			inserirTabela(cliente);
+		}	
 	}
-	public void setClientesPj(List<PessoaJuridica> cliente) {
-		this.clientesPJ = cliente;
+	
+	private void inserirTabela(Cliente cliente) {
+		modeloCliente.addRow(new Object[]{cliente.getDocumento(), cliente.getNome(), cliente.getLogradouro(), cliente.getTelefone()});
 	}
+	
 	
 	public void addActionsListener(RemoverClienteAction listener) {
 		this.listener = listener;
 	}
-	
-	public void inicializarTabela() {
-		modeloCliente.setRowCount(0);
-		if(clientesPF != null) {
-			inicializarPF();
-		}
-		modeloCliente.setRowCount(0);
-		if(clientesPJ != null) {
-			inicializarPJ();
-		}
-
-	}
-
-	private void inicializarPJ() {
-		for (PessoaJuridica pj : clientesPJ) {
-			System.out.println(pj.getNomeFantasia());
-			modeloCliente.addRow(new Object[]{pj.getCnpj(), pj.getNomeFantasia(), pj.getLogradouro(), pj.getTelefone()});
-		}
-		
-	}
-
-	private void inicializarPF() {
-		for (PessoaFisica pf : clientesPF) {
-			System.out.println(pf.getNome());
-			modeloCliente.addRow(new Object[]{pf.getCpf(), pf.getNome(), pf.getLogradouro(), pf.getTelefone()});
-		}
-		
-	}
-	
-
-	
-
 }

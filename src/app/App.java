@@ -21,6 +21,7 @@ public class App {
 	private Carrinho carrinho = new Carrinho();
 	private List<Carrinho> historico = new ArrayList<Carrinho>();
 	private List<Cliente> clientes = new ArrayList<Cliente>();
+	private boolean inicializado = false;
 	
 	
 	private static App app;
@@ -37,9 +38,11 @@ public class App {
 	}
 	
 	public void inicializar() {
+		if (inicializado) return;
 		inicializarProdutos();
 		inicializarTipos();
 		inicializarClientes();
+		inicializado = true;
 	}
 	
 	public void finalizar() {
@@ -89,6 +92,7 @@ public class App {
 	}
 	
 	private void inicializarProdutos() {
+		System.out.println("Inicializando produtos...");
 		File arquivoProduto = new File("produtos.txt");
 		
 		try (BufferedReader reader = new BufferedReader(new FileReader(arquivoProduto))) {
@@ -108,7 +112,6 @@ public class App {
 				produto.setTipo(tipo);
 
 				produtos.add(produto);
-				System.out.println(produto.getNome());
 			}
 
 		} catch (IOException e) {
@@ -118,6 +121,7 @@ public class App {
 	}
 	
 	private void inicializarTipos() {
+		System.out.println("Inicializando tipos de produto...");
 		File arquivoTipo = new File("tipos.txt");
 		try (BufferedReader reader = new BufferedReader(new FileReader(arquivoTipo))) {
 			String line;
@@ -137,6 +141,7 @@ public class App {
 	}
 	
 	private void inicializarClientes() {
+		System.out.println("Inicializando clientes...");
 		File arquivoClientes = new File("clientes.txt");
 		
 		try (BufferedReader reader = new BufferedReader(new FileReader(arquivoClientes))) {
@@ -154,7 +159,6 @@ public class App {
 					pf.setComplemento(dados[4]);
 					pf.setCep(Integer.parseInt(dados[5]));
 					pf.setTelefone(Long.parseLong(dados[6]));
-					System.out.println(pf.getNome() + " pf");
 					clientes.add(pf);
 				} else {
 					PessoaJuridica pj = new PessoaJuridica();
@@ -166,7 +170,6 @@ public class App {
 					pj.setCep(Integer.parseInt(dados[5]));
 					pj.setTelefone(Long.parseLong(dados[6]));
 					pj.setEmail(dados[7]);
-					System.out.println(pj.getNomeFantasia());
 					clientes.add(pj);
 				}
 			}

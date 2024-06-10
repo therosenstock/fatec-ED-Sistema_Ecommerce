@@ -1,10 +1,8 @@
 package actions;
 
-import model.PessoaFisica;
-import model.PessoaJuridica;
+import model.Cliente;
 
 public interface RemoverClienteAction {
 
-	public void actionPerformed(PessoaJuridica cliente);
-	public void actionPerformed(PessoaFisica cliente);
+	public void actionPerformed(Cliente cliente);
 }

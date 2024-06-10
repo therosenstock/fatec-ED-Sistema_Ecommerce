@@ -10,7 +10,9 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
@@ -63,8 +65,7 @@ public class HistoricoPanel extends JPanel {
 				for (Carrinho carrinho : historico) {
 					double total = carrinho.getTotal();
 					
-					String cliente = "Sem Cliente";
-					if (carrinho.getCliente() != null) cliente = carrinho.getCliente().getNome();
+					String cliente = carrinho.getCliente().getNome();
 					
 					if (id != 0 ) {
 						if (id == carrinho.getId()) {
@@ -83,8 +84,10 @@ public class HistoricoPanel extends JPanel {
 		add(buscarBtn);
 		
 		JTable table = new JTable(historicoTableModel);
-		table.setBounds(33, 154, 537, 184);
-		add(table);
+		JScrollPane scroll = new JScrollPane(table);
+		scroll.setBounds(33, 154, 537, 184);
+		add(scroll);
+		
 		
 		JButton exportarBtn = new JButton("Exportar CSV");
 		exportarBtn.setBounds(443, 354, 127, 23);
@@ -95,6 +98,7 @@ public class HistoricoPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				exportar();
+				JOptionPane.showMessageDialog(null, "Arquivo exportado");
 			}
 		});
 		
@@ -112,11 +116,7 @@ public class HistoricoPanel extends JPanel {
 		this.historico = historico;
 		for (Carrinho carrinho :  historico) {
 			long id = carrinho.getId();
-			String cliente = "Sem Cliente";
-			
-			if (carrinho.getCliente() != null) {
-				cliente = carrinho.getCliente().getNome();
-			}
+			String cliente = carrinho.getCliente().getNome();
 			
 			double total = carrinho.getTotal();
 			
