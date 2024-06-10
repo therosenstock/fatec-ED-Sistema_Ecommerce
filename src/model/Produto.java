@@ -56,4 +56,8 @@ public class Produto {
 	public void setTipo(TipoProduto tipo) {
 		this.tipo = tipo;
 	}
+	
+	public String toString() {
+		return this.nome;
+	}
 }

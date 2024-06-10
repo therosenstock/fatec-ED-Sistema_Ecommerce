@@ -12,6 +12,7 @@ import actions.CriarProdutoAction;
 import actions.CriarTipoProdutoAction;
 import actions.RemoverProdutoAction;
 import actions.RemoverTipoProdutoAction;
+import app.App;
 import model.Produto;
 import model.TipoProduto;
 
@@ -45,14 +46,13 @@ public class TelaProdutos extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 
-	private List<TipoProduto> tiposProduto;
-	private List<Produto> produtos;
 	private ConsultarTipoProdutoPanel consultarTipoProdutoPanel;
 	private AdicionarProdutoPanel adicionarProdutoPanel;
 	private ConsultarProdutoPanel consultarProdutoPanel;
 	private AdicionarTipoProdutoPanel adicionarTipoProdutoPanel;
 	private File arquivoTipo = new File("tipos.txt");
 	private File arquivoProduto = new File("produtos.txt");
+	private App app = App.getApp();
 
 	/**
 	 * Launch the application.
@@ -74,8 +74,6 @@ public class TelaProdutos extends JFrame {
 	 * Create the frame.
 	 */
 	public TelaProdutos() {
-		tiposProduto = new ArrayList<TipoProduto>();
-		produtos = new ArrayList<Produto>();
 		inicializarDados();
 
 		setTitle("Área de Estoque");
@@ -95,10 +93,10 @@ public class TelaProdutos extends JFrame {
 		adicionarTipoProdutoPanel = new AdicionarTipoProdutoPanel();
 		consultarProdutoPanel = new ConsultarProdutoPanel();
 
-		consultarTipoProdutoPanel.setTiposProduto(tiposProduto);
-		adicionarProdutoPanel.setTiposProduto(tiposProduto);
-		consultarProdutoPanel.setTiposProduto(tiposProduto);
-		consultarProdutoPanel.setProduto(produtos);
+		consultarTipoProdutoPanel.setTiposProduto(app.getTiposProduto());
+		adicionarProdutoPanel.setTiposProduto(app.getTiposProduto());
+		consultarProdutoPanel.setTiposProduto(app.getTiposProduto());
+		consultarProdutoPanel.setProduto(app.getProdutos());
 
 		tabbedPane.addTab("Cadastro de Produto", null, adicionarProdutoPanel, null);
 		tabbedPane.addTab("Cadastro de Tipos", null, adicionarTipoProdutoPanel, null);
@@ -108,35 +106,35 @@ public class TelaProdutos extends JFrame {
 		consultarTipoProdutoPanel.addActionsListener(new RemoverTipoProdutoAction() {
 			@Override
 			public void actionPerformed(TipoProduto tipo) {
-				tiposProduto.remove(tipo);
+				app.getTiposProduto().remove(tipo);
 				removerTipoProduto();
 				removerProdutosPorTipo(tipo);
 
-				consultarTipoProdutoPanel.setTiposProduto(tiposProduto);
-				adicionarProdutoPanel.setTiposProduto(tiposProduto);
-				consultarProdutoPanel.setTiposProduto(tiposProduto);
+				consultarTipoProdutoPanel.setTiposProduto(app.getTiposProduto());
+				adicionarProdutoPanel.setTiposProduto(app.getTiposProduto());
+				consultarProdutoPanel.setTiposProduto(app.getTiposProduto());
 			}
 		});
 
 		adicionarTipoProdutoPanel.addActionsListener(new CriarTipoProdutoAction() {
 			@Override
 			public void actionPerformed(TipoProduto tipo) {
-				tiposProduto.add(tipo);
+				app.getTiposProduto().add(tipo);
 				atualizarTiposProdutos(tipo);
 
-				consultarTipoProdutoPanel.setTiposProduto(tiposProduto);
-				adicionarProdutoPanel.setTiposProduto(tiposProduto);
-				consultarProdutoPanel.setTiposProduto(tiposProduto);
+				consultarTipoProdutoPanel.setTiposProduto(app.getTiposProduto());
+				adicionarProdutoPanel.setTiposProduto(app.getTiposProduto());
+				consultarProdutoPanel.setTiposProduto(app.getTiposProduto());
 			}
 		});
 
 		adicionarProdutoPanel.addActionListener(new CriarProdutoAction() {
 			@Override
 			public void actionPerformed(Produto produto) {
-				produtos.add(produto);
+				app.getProdutos().add(produto);
 				atualizarProdutos(produto);
 
-				consultarProdutoPanel.setProduto(produtos);
+				consultarProdutoPanel.setProduto(app.getProdutos());
 			}
 		});
 
@@ -145,7 +143,7 @@ public class TelaProdutos extends JFrame {
 			@Override
 			public void actionPerformed(Produto produto) {
 				// TODO Auto-generated method stub
-				produtos.remove(produto);
+				app.getProdutos().remove(produto);
 				removerProduto();
 			}
 		});
@@ -163,81 +161,25 @@ public class TelaProdutos extends JFrame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println(tiposProduto + " atualizando");
+		System.out.println(app.getTiposProduto() + " atualizando");
 	}
 
 	private void atualizarProdutos(Produto produto) {
-		// Salvar no arquivo
-		try (BufferedWriter writer = new BufferedWriter(new FileWriter(arquivoProduto, true))) {
-			var dados = produto.getId() + ";" + produto.getNome() + ";" + produto.getDescricao() + ";"
-					+ produto.getQuantidade() + ";" + produto.getValor() + ";" + produto.getTipo().getId() + ";"
-					+ produto.getTipo().getNome() + ";" + produto.getTipo().getDescricao();
-			writer.write(dados);
-			writer.newLine();
-			writer.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		app.addProduto(produto);
 		System.out.println(produto + " atualizando");
-
-		consultarProdutoPanel.setProduto(produtos);
+		consultarProdutoPanel.setProduto(app.getProdutos());
 	}
 
 	private void inicializarDados() {
-		inicializarTipos();
-		inicializarProdutos();
+		app.inicializar();
 	}
 
-	private void inicializarTipos() {
-		try (BufferedReader reader = new BufferedReader(new FileReader(arquivoTipo))) {
-			String line;
-			while ((line = reader.readLine()) != null) {
-				var dados = line.split(";");
-				TipoProduto tipo = new TipoProduto();
-				tipo.setId(Long.parseLong(dados[0]));
-				tipo.setNome(dados[1]);
-				tipo.setDescricao(dados[2]);
 
-				tiposProduto.add(tipo);
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	private void inicializarProdutos() {
-		try (BufferedReader reader = new BufferedReader(new FileReader(arquivoProduto))) {
-			String line;
-			while ((line = reader.readLine()) != null) {
-				var dados = line.split(";");
-				Produto produto = new Produto();
-				produto.setId(Long.parseLong(dados[0]));
-				produto.setNome(dados[1]);
-				produto.setDescricao(dados[2]);
-				produto.setQuantidade(Integer.parseInt(dados[3]));
-				produto.setValor(Double.parseDouble(dados[4]));
-				TipoProduto tipo = new TipoProduto();
-				tipo.setId(Long.parseLong(dados[5]));
-				tipo.setNome(dados[6]);
-				tipo.setDescricao(dados[7]);
-				produto.setTipo(tipo);
-
-				produtos.add(produto);
-				System.out.println(produto.getNome());
-			}
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 
 	private void removerTipoProduto() {
 		File arquivoTemp = new File("novoarquivo.txt");
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(arquivoTemp, true))) {
-			for (TipoProduto tipo : tiposProduto) {
+			for (TipoProduto tipo : app.getTiposProduto()) {
 				writer.write(tipo.getId() + ";" + tipo.getNome() + ";" + tipo.getDescricao());
 				writer.newLine();
 
@@ -251,16 +193,16 @@ public class TelaProdutos extends JFrame {
 		arquivoTipo.delete();
 		arquivoTemp.renameTo(arquivoTipo);
 
-		consultarTipoProdutoPanel.setTiposProduto(tiposProduto);
-		adicionarProdutoPanel.setTiposProduto(tiposProduto);
-		consultarProdutoPanel.setTiposProduto(tiposProduto);
+		consultarTipoProdutoPanel.setTiposProduto(app.getTiposProduto());
+		adicionarProdutoPanel.setTiposProduto(app.getTiposProduto());
+		consultarProdutoPanel.setTiposProduto(app.getTiposProduto());
 
 	}
 
 	private void removerProduto() {
 		File arquivoTemp = new File("novoarquivo.txt");
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(arquivoTemp, true))) {
-			for (Produto produto : produtos) {
+			for (Produto produto : app.getProdutos()) {
 				var dados = produto.getId() + ";" + produto.getNome() + ";" + produto.getDescricao() + ";"
 						+ produto.getQuantidade() + ";" + produto.getValor() + ";" + produto.getTipo().getId() + ";"
 						+ produto.getTipo().getNome() + ";" + produto.getTipo().getDescricao();
@@ -275,11 +217,10 @@ public class TelaProdutos extends JFrame {
 		
 		arquivoProduto.delete();
 		arquivoTemp.renameTo(arquivoProduto);
-
 	}
 
 	private void removerProdutosPorTipo(TipoProduto tipo) {
-        Iterator<Produto> iterator = produtos.iterator();
+        Iterator<Produto> iterator = app.getProdutos().iterator();
         while (iterator.hasNext()) {
             Produto produto = iterator.next();
 			if (produto.getTipo().getId() == tipo.getId()) {
@@ -288,7 +229,7 @@ public class TelaProdutos extends JFrame {
 		}
 
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(arquivoProduto, false))) {
-			for (Produto produto : produtos) {
+			for (Produto produto : app.getProdutos()) {
 				var dados = produto.getId() + ";" + produto.getNome() + ";" + produto.getDescricao() + ";"
 						+ produto.getQuantidade() + ";" + produto.getValor() + ";" + produto.getTipo().getId() + ";"
 						+ produto.getTipo().getNome() + ";" + produto.getTipo().getDescricao();
@@ -301,7 +242,7 @@ public class TelaProdutos extends JFrame {
 			e.printStackTrace();
 		}
 
-		consultarProdutoPanel.setProduto(produtos);
+		consultarProdutoPanel.setProduto(app.getProdutos());
 
 	}
 }

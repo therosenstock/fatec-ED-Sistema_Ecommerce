@@ -1,0 +1,22 @@
+
+>
+java:S1604G"(Make this anonymous inner class a lambda(Ü¤ä˜
+C
+java:S1604_"(Make this anonymous inner class a lambda(õÜ¬ùÿÿÿÿ
+k	java:S117T"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(‡ß§íøÿÿÿÿ
+e	java:S117Z"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ãò¬v
+t
+java:S2293X"YReplace the type specification in this constructor call with the diamond operator ("<>").(€õò¶øÿÿÿÿ
+E
+java:S3740r"/Provide the parametrized type for this generic.(âÂ£›
+m
+java:S1450!"WRemove the "listener" field and declare it as a local variable in the relevant methods.(ª·Æ¦
+v
+java:S1450 "[Remove the "tiposProduto" field and declare it as a local variable in the relevant methods.(‚‹ÙŒøÿÿÿÿ
+E	java:S106c"+Replace this use of System.out by a logger.(íÁ£‹üÿÿÿÿ
+F	java:S106…"+Replace this use of System.out by a logger.(¼©µµúÿÿÿÿ
+F	java:S106ˆ"+Replace this use of System.out by a logger.(³¤çÿşÿÿÿÿ
+K
+java:S1068 "0Remove this unused "tiposProduto" private field.(‚‹ÙŒøÿÿÿÿ
+B
+java:S1068!",Remove this unused "listener" private field.(ª·Æ¦

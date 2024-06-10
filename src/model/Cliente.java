@@ -47,5 +47,9 @@ public class Cliente {
 	public void setTelefone(int telefone) {
 		this.telefone = telefone;
 	}
+	
+	public String getNome() {
+		throw new RuntimeException("Deve ser implementado em uma classe filha");
+	}
 
 }
