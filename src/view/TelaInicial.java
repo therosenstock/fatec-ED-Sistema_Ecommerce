@@ -49,21 +49,42 @@ public class TelaInicial extends JFrame {
 		
 		JButton btnCompras = new JButton("Área de Compras");
 		var self = this;
+		
 		btnCompras.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				var novaTela = new TelaCompras();
-				novaTela.setVisible(true);
-				self.setVisible(false);
+				TelaCompras telaCompras = new TelaCompras();
+				telaCompras.setVisible(true);
 			}
 		});
+		
 		btnCompras.setBounds(219, 135, 168, 50);
 		contentPane.add(btnCompras);
 		
 		JButton btnGerenciarCliente = new JButton("Gerenciar Cliente");
+		
+		btnGerenciarCliente.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				TelaCliente telaCliente = new TelaCliente();
+				telaCliente.setVisible(true);
+			}
+		});
+		
 		btnGerenciarCliente.setBounds(219, 196, 168, 50);
 		contentPane.add(btnGerenciarCliente);
 		
 		JButton btnGerenciarProdutos = new JButton("Gerenciar Produtos");
+		btnGerenciarProdutos.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				TelaProdutos telaProodutos = new TelaProdutos();
+				telaProodutos.setVisible(true);
+			}
+		});
+		
+		
 		btnGerenciarProdutos.setBounds(219, 255, 168, 50);
 		contentPane.add(btnGerenciarProdutos);
 		

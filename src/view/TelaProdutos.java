@@ -53,6 +53,7 @@ public class TelaProdutos extends JFrame {
 	private File arquivoTipo = new File("tipos.txt");
 	private File arquivoProduto = new File("produtos.txt");
 	private App app = App.getApp();
+	private static int CLOSE_OPERATION = JFrame.DISPOSE_ON_CLOSE;
 
 	/**
 	 * Launch the application.
@@ -61,6 +62,7 @@ public class TelaProdutos extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					CLOSE_OPERATION = JFrame.EXIT_ON_CLOSE;
 					TelaProdutos frame = new TelaProdutos();
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -77,7 +79,7 @@ public class TelaProdutos extends JFrame {
 		inicializarDados();
 
 		setTitle("Área de Estoque");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(CLOSE_OPERATION);
 		setBounds(100, 100, 640, 480);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -169,7 +171,7 @@ public class TelaProdutos extends JFrame {
 		System.out.println(produto + " atualizando");
 		consultarProdutoPanel.setProduto(app.getProdutos());
 	}
-	
+
 	private void inicializarDados() {
 		app.inicializar();
 	}

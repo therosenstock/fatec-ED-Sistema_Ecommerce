@@ -70,6 +70,9 @@ public class CheckoutPanel extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				Cliente cliente = (Cliente) clienteComboBoxModel.getSelectedItem();
+				if (cliente == null) return;
+				carrinho.setCliente(cliente);
 				listener.actionPerformed();
 			}
 		});
@@ -104,6 +107,8 @@ public class CheckoutPanel extends JPanel {
 	
 	public void setClientes(List<Cliente> clientes) {
 		this.clientes = clientes;
+		clienteComboBoxModel.removeAllElements();
+		
 		for (Cliente cliente : clientes) {
 			clienteComboBoxModel.addElement(cliente);
 		}

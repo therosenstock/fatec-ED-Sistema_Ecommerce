@@ -46,6 +46,7 @@ public class TelaCliente extends JFrame {
 	private AdicionarClientePFPanel adicionarClientePF;
 	private AdicionarClientePJPanel adicionarClientePJ;
 	private File arquivoClientes = new File("clientes.txt");
+	private static int CLOSE_OPERATION = JFrame.DISPOSE_ON_CLOSE;
 
 	/**
 	 * Launch the application.
@@ -53,6 +54,7 @@ public class TelaCliente extends JFrame {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
+				CLOSE_OPERATION = JFrame.EXIT_ON_CLOSE;
 				try {
 					TelaCliente frame = new TelaCliente();
 					frame.setVisible(true);
@@ -68,7 +70,7 @@ public class TelaCliente extends JFrame {
 	 */
 	public TelaCliente() {
 		setTitle("Área de Clientes");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(CLOSE_OPERATION);
 		setBounds(100, 100, 640, 480);
 		inicializarListas();	
 

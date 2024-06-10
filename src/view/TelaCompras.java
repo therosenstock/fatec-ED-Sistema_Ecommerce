@@ -27,6 +27,7 @@ public class TelaCompras extends JFrame {
 	private CheckoutPanel checkout;
 	private HistoricoPanel historicoPanel;
 	private App app = App.getApp();
+	private static int CLOSE_OPERATION = JFrame.DISPOSE_ON_CLOSE;
 
 	/**
 	 * Launch the application.
@@ -34,6 +35,7 @@ public class TelaCompras extends JFrame {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
+				CLOSE_OPERATION = JFrame.EXIT_ON_CLOSE;
 				try {
 					TelaCompras frame = new TelaCompras();
 					frame.setVisible(true);
@@ -49,7 +51,7 @@ public class TelaCompras extends JFrame {
 	 */
 	public TelaCompras() {
 		app.inicializar();
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(CLOSE_OPERATION);
 		setBounds(100, 100, 640, 480);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -101,6 +103,7 @@ public class TelaCompras extends JFrame {
 			@Override
 			public void actionPerformed() {
 				System.out.println("Ir para pagamento");
+				tabbedPane.setSelectedIndex(2);
 			}
 		});
 		
@@ -108,6 +111,7 @@ public class TelaCompras extends JFrame {
 		
 		checkout = new CheckoutPanel();
 		checkout.setCarrinho(app.getCarrinho());
+		checkout.setClientes(app.getClientes());
 		
 		checkout.addActionListener(new FinalizarAction() {
 			

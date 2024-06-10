@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2cc84aff-98cd-4103-9228-dba9b7baea10" name="Changes" comment="" />
+    <list default="true" id="a3a273b6-068f-47ab-a320-7a61a35385e8" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,27 +17,27 @@
   <component name="ProjectColorInfo"><![CDATA[{
   "associatedIndex": 2
 }]]></component>
-  <component name="ProjectId" id="2hOHgVvloEkiLtGdCkl2fSH2Ytl" />
+  <component name="ProjectId" id="2hglA5l8Vzy4yfhnQScJK4zhauU" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
+    <option name="showMembers" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/fabio/eclipse-workspace/Sistema_Ecommerce"
+    "git-widget-placeholder": "tela__compra",
+    "kotlin-language-version-configured": "true"
   }
 }]]></component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="2cc84aff-98cd-4103-9228-dba9b7baea10" name="Changes" comment="" />
-      <created>1717458314501</created>
+      <changelist id="a3a273b6-068f-47ab-a320-7a61a35385e8" name="Changes" comment="" />
+      <created>1718023455005</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1717458314501</updated>
+      <updated>1718023455005</updated>
     </task>
     <servers />
   </component>

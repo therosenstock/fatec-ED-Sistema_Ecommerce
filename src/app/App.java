@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.Carrinho;
+import model.Cliente;
+import model.PessoaFisica;
+import model.PessoaJuridica;
 import model.Produto;
 import model.TipoProduto;
 
@@ -17,6 +20,7 @@ public class App {
 	private List<TipoProduto> tiposProduto = new ArrayList<TipoProduto>();
 	private Carrinho carrinho = new Carrinho();
 	private List<Carrinho> historico = new ArrayList<Carrinho>();
+	private List<Cliente> clientes = new ArrayList<Cliente>();
 	
 	
 	private static App app;
@@ -35,6 +39,7 @@ public class App {
 	public void inicializar() {
 		inicializarProdutos();
 		inicializarTipos();
+		inicializarClientes();
 	}
 	
 	public void finalizar() {
@@ -53,6 +58,10 @@ public class App {
 	
 	public List<Carrinho> getHistorico() {
 		return historico;
+	}
+	
+	public List<Cliente> getClientes() {
+		return clientes;
 	}
 	
 	public void addProduto(Produto produto) {
@@ -125,5 +134,46 @@ public class App {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	private void inicializarClientes() {
+		File arquivoClientes = new File("clientes.txt");
+		
+		try (BufferedReader reader = new BufferedReader(new FileReader(arquivoClientes))) {
+			String line;
+			while ((line = reader.readLine()) != null) {
+				var dados = line.split(";");
+				int tamanho = dados.length;
+				
+				if(tamanho == 7) {
+					PessoaFisica pf = new PessoaFisica();
+					pf.setCpf(Long.parseLong(dados[0]));
+					pf.setNome(dados[1]);
+					pf.setLogradouro(dados[2]);
+					pf.setNumero(Integer.parseInt(dados[3]));
+					pf.setComplemento(dados[4]);
+					pf.setCep(Integer.parseInt(dados[5]));
+					pf.setTelefone(Long.parseLong(dados[6]));
+					System.out.println(pf.getNome() + " pf");
+					clientes.add(pf);
+				} else {
+					PessoaJuridica pj = new PessoaJuridica();
+					pj.setCnpj(Long.parseLong(dados[0]));
+					pj.setNomeFantasia(dados[1]);
+					pj.setLogradouro(dados[2]);
+					pj.setNumero(Integer.parseInt(dados[3]));
+					pj.setComplemento(dados[4]);
+					pj.setCep(Integer.parseInt(dados[5]));
+					pj.setTelefone(Long.parseLong(dados[6]));
+					pj.setEmail(dados[7]);
+					System.out.println(pj.getNomeFantasia());
+					clientes.add(pj);
+				}
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 }

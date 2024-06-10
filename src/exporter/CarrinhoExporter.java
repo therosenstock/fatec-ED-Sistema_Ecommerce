@@ -35,7 +35,7 @@ public class CarrinhoExporter {
 	
 	private String getLinha(Carrinho carrinho) {
 		String cliente = "Sem Cliente";
-		if (carrinho.getCliente() != null) carrinho.getCliente().getNome();
+		if (carrinho.getCliente() != null) cliente = carrinho.getCliente().getNome();
 		
 		return carrinho.getId() + ";" + cliente + ";" + carrinho.getTotal();
 	}

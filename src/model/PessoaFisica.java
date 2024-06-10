@@ -21,5 +21,9 @@ public class PessoaFisica extends Cliente{
 	public void setCpf(long cpf) {
 		this.cpf = cpf;
 	}
+	
+	public String toString() {
+		return nome;
+	}
 
 }

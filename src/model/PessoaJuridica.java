@@ -35,4 +35,8 @@ public class PessoaJuridica extends Cliente{
 		return nomeFantasia;
 	}
 	
+	public String toString() {
+		return nomeFantasia;
+	}
+	
 }
